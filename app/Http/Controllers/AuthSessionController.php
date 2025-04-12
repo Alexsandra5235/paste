@@ -13,20 +13,19 @@ use Illuminate\Http\Request;
 class AuthSessionController extends Controller
 {
 
-    public function yandex(): RedirectResponse // перенаправляем юзера на яндекс Auth
+    public function yandex(): RedirectResponse
     {
         return Socialite::driver('yandex')->redirect();
     }
 
-    public function yandexRedirect(): object // принимаем возвращаемые данные и работаем с ними
+    public function yandexRedirect(): object
     {
         $user = Socialite::driver('yandex')->user();
 
-        $user = User::query()->firstOrCreate([ // используем firstOrCreate для проверки есть ли такие пользователи в нашей БД
+        $user = User::query()->firstOrCreate([
             'email' => $user->email
         ], [
-            'name' => $user->user['display_name'], // display_name - переменаая хранящая полное ФИО пользователя
-            // остальные переменные можете посмотреть использовав $dd('$user')
+            'name' => $user->user['display_name'],
             'password' => Hash::make(Str::random(24)),
         ]);
 

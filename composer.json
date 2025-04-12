@@ -10,6 +10,10 @@
         "laravel/framework": "^12.0",
         "laravel/socialite": "^5.19",
         "laravel/tinker": "^2.10.1",
+        "orchid/crud": "^4.4",
+        "orchid/platform": "^14.50",
+        "socialiteproviders/google": "^4.1",
+        "socialiteproviders/vkontakte": "^5.0",
         "socialiteproviders/yandex": "^4.1"
     },
     "require-dev": {
