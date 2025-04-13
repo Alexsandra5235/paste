@@ -29,14 +29,11 @@ class PasteService
         }
         return $this->pasteRepository->create($pasteDTO);
     }
-    public function createPasteDB(Request $request, string $url) : Paste | null
+    public function createPasteDB(Request $request, string $url) : Paste
     {
-        if($request->check_private){
-            return $this->pasteRepository->createDB($url,$request);
+        if(Paste::query()->count() >= 10){
+            Paste::query()->orderBy('created_at')->first()->delete();
         }
-        else {
-            return null;
-        }
-
+        return $this->pasteRepository->createDB($url,$request);
     }
 }

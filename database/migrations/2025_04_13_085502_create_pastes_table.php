@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('pastes', function (Blueprint $table) {
             $table->id();
+            $table->string('paste_name');
+            $table->string('paste_format');
+            $table->string('paste_private');
+            $table->string('paste_expire_date');
+            $table->string('paste_code');
             $table->string('url');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
