@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthSessionController;
 use App\Http\Controllers\PasteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\UnbanUser;
 use App\Orchid\Screens\User\UserEditScreen;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,9 @@ Route::middleware(UnbanUser::class)->group(function () {
 
     Route::post('/paste', [PasteController::class, 'store'])->name('paste.store');
     Route::get('/paste', [PasteController::class, 'index'])->name('paste.index');
+
+    Route::post('/paste/user',[UserController::class, 'store'])->name('paste.user.store');
+    Route::get('/paste/user',[UserController::class, 'login'])->name('paste.user.index');
 
 });
 

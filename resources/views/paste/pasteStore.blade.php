@@ -50,6 +50,14 @@
                 </select>
             </div>
 
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="check_login" name="check_login">
+                <label class="form-check-label" for="check_login">
+                    Создать профиль для публикации пасты?
+                </label>
+            </div>
+
+
             <input type="submit" class="btn btn-primary" value="Создать пасту">
         </form>
     </div>

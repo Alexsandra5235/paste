@@ -19,8 +19,11 @@ class PasteController extends Controller
     /**
      * @throws ConnectionException
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): object
     {
+        if($request->check_login){
+            return view('paste.login');
+        }
         $request->validate([
             'paste_code' => 'required|string',
             'paste_name' => 'required|string',
@@ -40,10 +43,10 @@ class PasteController extends Controller
 
         $response = $this->pasteService->createPaste($pasteDTO);
 
-        return response()->json(['response' => $response]);
+        return redirect()->back();
     }
     public function index() : object
     {
-        return view('pasteStore');
+        return view('paste.pasteStore');
     }
 }
