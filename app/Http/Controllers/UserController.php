@@ -39,7 +39,12 @@ class UserController extends Controller
 
         $response = $this->userService->createUser($user);
 
-        return $response;
+        if(empty($response)){
+            return redirect()->back()->with('errors','Неверные учетные данные.');
+        }
+        else {
+            return redirect()->back()->with('success','Успешный вход в аккаунт Pastebin.');
+        }
     }
     public function login() : object
     {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
 use Orchid\Filters\Types\WhereDateStartEnd;
@@ -11,6 +12,11 @@ use Orchid\Screen\AsSource;
 class User extends Authenticatable
 {
     use AsSource;
+
+    public function paste() : HasMany
+    {
+        return $this->hasMany(Paste::class);
+    }
     /**
      * The attributes that are mass assignable.
      *

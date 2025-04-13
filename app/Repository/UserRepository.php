@@ -4,14 +4,18 @@ namespace App\Repository;
 
 use App\DTO\UserDTO;
 use App\Interfaces\UserRepositoryInterface;
+use Exception;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
 class UserRepository implements UserRepositoryInterface
 {
 
+
     /**
      * @throws ConnectionException
+     * @throws Exception
      */
     public function create(UserDTO $user) : string
     {
@@ -21,6 +25,10 @@ class UserRepository implements UserRepositoryInterface
             'api_user_password' => $user->password,
         ]);
 
-        return $response->body();
+        if ($response->successful()) {
+            return $response;
+        } else {
+            return '';
+        }
     }
 }

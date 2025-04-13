@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\DTO\UserDTO;
 use App\Repository\UserRepository;
+use Exception;
 use Illuminate\Http\Client\ConnectionException;
 
 class UserService
