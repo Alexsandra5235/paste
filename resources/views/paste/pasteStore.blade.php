@@ -1,6 +1,18 @@
 <x-app-layout>
 
     <div class="container">
+        @if(session('success'))
+            <div class="alert alert-success">
+                <p>{{ session('success') }}</p>
+                <p>Посмотреть пасту можно по ссылке: <a class="link-info" href="{{ session('paste') }}" target="_blank" rel="noopener noreferrer">Нажми, чтобы перейти</a></p>
+            </div>
+        @endif
+
+        @if(session('errors'))
+            <div class="alert alert-danger">
+                {{ session('errors') }}
+            </div>
+        @endif
         <h1 class="my-2 text-center">Создать новую пасту</h1>
 
         <form action="{{ route('paste.store') }}" method="POST">

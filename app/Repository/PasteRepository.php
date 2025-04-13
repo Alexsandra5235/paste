@@ -4,8 +4,12 @@ namespace App\Repository;
 
 use App\DTO\PasteDTO;
 use App\Interfaces\PasteRepositoryInterface;
+use App\Models\Paste;
 use http\Env\Response;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class PasteRepository implements PasteRepositoryInterface
@@ -37,7 +41,12 @@ class PasteRepository implements PasteRepositoryInterface
             'api_paste_format' => $pasteDTO->pasteFormat,
         ]);
 
-        return $response->body();
+
+        if ($response->successful()) {
+            return $response;
+        } else {
+            return '';
+        }
     }
 
     public function update($id)
@@ -48,5 +57,13 @@ class PasteRepository implements PasteRepositoryInterface
     public function delete($id)
     {
         // TODO: Implement delete() method.
+    }
+
+    public function createDB(string $url, Request $request): Paste
+    {
+        return Paste::query()->create([
+            'user_id' => $request->user()->id,
+            'url' => $url,
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTO\PasteDTO;
+use App\Models\Paste;
 use App\Service\PasteService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +21,7 @@ class PasteController extends Controller
     /**
      * @throws ConnectionException
      */
-    public function store(Request $request): object
+    public function store(Request $request): string
     {
         $request->validate([
             'paste_code' => 'required|string',
@@ -35,13 +36,22 @@ class PasteController extends Controller
             $request->paste_name,
             $request->paste_format,
             $request->paste_private,
-            $request->expire_date,
-            $request->user()->api_user_key ?? null
+            $request->expire_date
         );
+
+        if(!$request->check_private){
+            $pasteDTO->userKey = $request->user()->api_key;
+        }
 
         $response = $this->pasteService->createPaste($pasteDTO);
 
-        return redirect()->back();
+        if(empty($response)){
+            return redirect()->back()->with('errors','Ошибка запроса.');
+        }
+        else {
+            $paste = $this->pasteService->createPasteDB($request,$response);
+            return redirect()->back()->with('success','Паста успешно загружена.')->with('paste',$paste->url);
+        }
     }
     public function index() : object
     {
