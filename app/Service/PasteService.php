@@ -28,9 +28,10 @@ class PasteService
     {
         return $this->pasteRepository->create($pasteDTO);
     }
-    public function createPasteDB(PasteDTO $pasteDTO, string $url) : Paste
+    public function createPasteDB(PasteDTO $pasteDTO, string $url) : Paste | null
     {
 //        $this->deleteExpired();
+        if($pasteDTO->pastePrivate != 0) return null;
 
         if(Paste::query()->count() >= 10){
             Paste::query()->orderBy('created_at')->first()->delete();

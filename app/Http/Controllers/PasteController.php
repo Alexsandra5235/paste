@@ -71,7 +71,7 @@ class PasteController extends Controller
 
         $this->pasteService->createPasteDB($pasteDTO, 'https://example.com');
 
-        return redirect()->to('dashboard');
+        return redirect()->back();
     }
 
 }

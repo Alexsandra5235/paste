@@ -25,7 +25,7 @@ class Paste extends Model
 
     public function getRemainingTime(): string
     {
-        if ($this->expire_date === 'N') {
+        if ($this->paste_expire_date === 'N') {
             return 'Без ограничения';
         }
 
