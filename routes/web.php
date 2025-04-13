@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthSessionController;
+use App\Http\Controllers\PasteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\UnbanUser;
 use App\Orchid\Screens\User\UserEditScreen;
@@ -24,6 +25,9 @@ Route::middleware(UnbanUser::class)->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
+
+    Route::post('/paste', [PasteController::class, 'store'])->name('paste.store');
+    Route::get('/paste', [PasteController::class, 'index'])->name('paste.index');
 
 });
 
