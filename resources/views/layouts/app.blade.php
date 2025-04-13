@@ -21,11 +21,16 @@
 
             @include('layouts.nav')
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 pe-0" style="margin-top: 31px">
+                        @include('layouts.paste')
+                    </div>
+                    <div class="col-md-9">
+                        {{ $slot }}
+                    </div>
+                </div>
+            </div>
         </div>
-
     </body>
 </html>

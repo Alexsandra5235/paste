@@ -22,12 +22,21 @@ class PasteService
     /**
      * @throws ConnectionException
      */
-    public function createPaste(PasteDTO $pasteDTO): string
+    public function createPaste(PasteDTO $pasteDTO, Request $request): string
     {
+        if(!$request->check_private){
+            $pasteDTO->userKey = $request->user()->api_key;
+        }
         return $this->pasteRepository->create($pasteDTO);
     }
-    public function createPasteDB(Request $request, string $url) : Paste
+    public function createPasteDB(Request $request, string $url) : Paste | null
     {
-        return $this->pasteRepository->createDB($url,$request);
+        if($request->check_private){
+            return $this->pasteRepository->createDB($url,$request);
+        }
+        else {
+            return null;
+        }
+
     }
 }

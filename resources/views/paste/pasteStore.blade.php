@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <div class="container">
+    <div class="container mb-4">
         @if(session('success'))
             <div class="alert alert-success">
                 <p>{{ session('success') }}</p>
