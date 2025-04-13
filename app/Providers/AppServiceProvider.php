@@ -12,7 +12,8 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public PasteRepository $pasteRepository;
+    protected PasteRepository $pasteRepository;
+    protected PasteService $pasteService;
 
     /**
      * Register any application services.
@@ -28,11 +29,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->pasteRepository = new PasteRepository();
+        $this->pasteService = new PasteService($this->pasteRepository);
 
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
             $event->extendSocialite('yandex', \SocialiteProviders\Yandex\Provider::class);
         });
         View::composer('*', function ($view) {
+            $this->pasteService->deleteExpired();
             $latestPastes = $this->pasteRepository->findAll();
             $view->with(['latestPastes' => $latestPastes,'nowDate' => now()]);
         });

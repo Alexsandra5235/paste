@@ -54,10 +54,12 @@
                 <select class="form-control" id="expire_date" name="expire_date" required>
                     <option value="10M">10 минут</option>
                     <option value="1H">1 час</option>
-                    <option value="3H">3 часа</option>
                     <option value="1D">1 день</option>
                     <option value="1W">1 неделя</option>
+                    <option value="2W">2 недели</option>
                     <option value="1M">1 месяц</option>
+                    <option value="6M">6 месяцев</option>
+                    <option value="1Y">1 год</option>
                     <option value="N">Без ограничения</option>
                 </select>
             </div>

@@ -58,4 +58,20 @@ class PasteController extends Controller
         return view('paste.pasteStore');
     }
 
+    public function test(Request $request) : object
+    {
+
+        $pasteDTO = new PasteDTO(
+            $request->paste_code,
+            $request->paste_name,
+            $request->paste_format,
+            $request->paste_private,
+            $request->expire_date
+        );
+
+        $this->pasteService->createPasteDB($pasteDTO, 'https://example.com');
+
+        return redirect()->to('dashboard');
+    }
+
 }
