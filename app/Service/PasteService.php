@@ -7,6 +7,7 @@ use App\Models\Paste;
 use App\Repository\PasteRepository;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class PasteService
 {
@@ -33,4 +34,5 @@ class PasteService
         }
         return $this->pasteRepository->createDB($url, $pasteDTO);
     }
+
 }

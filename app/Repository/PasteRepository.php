@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 class PasteRepository implements PasteRepositoryInterface
@@ -20,9 +21,9 @@ class PasteRepository implements PasteRepositoryInterface
         // TODO: Implement find() method.
     }
 
-    public function findAll()
+    public function findAll() : Collection
     {
-        // TODO: Implement findAll() method.
+        return Paste::query()->orderBy('created_at', 'desc')->get();
     }
 
     /**

@@ -57,4 +57,5 @@ class PasteController extends Controller
     {
         return view('paste.pasteStore');
     }
+
 }

@@ -4,12 +4,13 @@ use App\Http\Controllers\AuthSessionController;
 use App\Http\Controllers\PasteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\LatestPastes;
 use App\Http\Middleware\UnbanUser;
 use App\Orchid\Screens\User\UserEditScreen;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(UnbanUser::class)->group(function () {
+Route::middleware([UnbanUser::class, LatestPastes::class])->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
