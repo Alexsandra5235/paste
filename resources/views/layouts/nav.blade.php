@@ -16,9 +16,11 @@
                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Профиль</a></li>
                 <li><a class="dropdown-item" href="{{ route('paste.index') }}">Добавить новую пасту</a></li>
                 <li><a class="dropdown-item" href="{{ route('paste.user.index') }}">Авторизовать профиль Pastebin</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Выход</a></li>
             </ul>
         </div>
+        <form class="nav-item mt-2" method="post" action="{{ route('logout') }}">
+            @csrf
+            <input type="submit" value="Выйти">
+        </form>
     </header>
 </div>

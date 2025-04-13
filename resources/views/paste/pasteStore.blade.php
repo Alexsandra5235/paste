@@ -58,11 +58,8 @@
                     </label>
                 </div>
             @else
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="check_login" name="check_login">
-                    <label class="form-check-label" for="check_login">
-                        Создать профиль для публикации пасты?
-                    </label>
+                <div class="form-group mb-2">
+                    <small>Паста добавится анонимно. Если необходимо опубликовать пасту со своего аккаунта, необходимо зайти в него. Для этого нужно зайти в специальный пункт меню.</small>
                 </div>
             @endif
 

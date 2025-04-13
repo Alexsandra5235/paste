@@ -22,9 +22,6 @@ class PasteController extends Controller
      */
     public function store(Request $request): object
     {
-        if($request->check_login){
-            return view('paste.login');
-        }
         $request->validate([
             'paste_code' => 'required|string',
             'paste_name' => 'required|string',
