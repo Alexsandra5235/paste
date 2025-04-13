@@ -26,7 +26,7 @@ class UserRepository implements UserRepositoryInterface
         ]);
 
         if ($response->successful()) {
-            return $response;
+            return $response->body();
         } else {
             return '';
         }

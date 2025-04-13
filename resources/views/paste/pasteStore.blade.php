@@ -50,13 +50,21 @@
                 </select>
             </div>
 
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="check_login" name="check_login">
-                <label class="form-check-label" for="check_login">
-                    Создать профиль для публикации пасты?
-                </label>
-            </div>
-
+            @if(Auth::user()->api_key)
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="check_private" name="check_private">
+                    <label class="form-check-label" for="check_private">
+                        Загрузить анонимно?
+                    </label>
+                </div>
+            @else
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="check_login" name="check_login">
+                    <label class="form-check-label" for="check_login">
+                        Создать профиль для публикации пасты?
+                    </label>
+                </div>
+            @endif
 
             <input type="submit" class="btn btn-primary" value="Создать пасту">
         </form>

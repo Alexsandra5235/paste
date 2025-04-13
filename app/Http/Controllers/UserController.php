@@ -10,6 +10,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
@@ -43,6 +44,9 @@ class UserController extends Controller
             return redirect()->back()->with('errors','Неверные учетные данные.');
         }
         else {
+            $user = auth()->user();
+            $user->api_key = $response;
+            $user->save();
             return redirect()->back()->with('success','Успешный вход в аккаунт Pastebin.');
         }
     }

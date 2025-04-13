@@ -7,6 +7,7 @@ use App\Service\PasteService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use function Pest\Laravel\withMiddleware;
 
 class PasteController extends Controller
 {
