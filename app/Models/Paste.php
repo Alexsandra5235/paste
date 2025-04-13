@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Paste extends Model
 {
     protected $fillable = [
+        'paste_name',
+        'paste_format',
+        'paste_private',
+        'paste_code',
+        'paste_expire_date',
         'user_id',
         'url',
     ];

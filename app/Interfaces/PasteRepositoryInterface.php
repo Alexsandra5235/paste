@@ -12,7 +12,7 @@ interface PasteRepositoryInterface
     public function find($id);
     public function findAll();
     public function create(PasteDTO $pasteDTO) : string;
-    public function createDB(string $url, Request $request) : Paste;
+    public function createDB(string $url, PasteDTO $pasteDTO) : Paste;
     public function update($id);
     public function delete($id);
 }

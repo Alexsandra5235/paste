@@ -59,10 +59,15 @@ class PasteRepository implements PasteRepositoryInterface
         // TODO: Implement delete() method.
     }
 
-    public function createDB(string $url, Request $request): Paste
+    public function createDB(string $url, PasteDTO $pasteDTO): Paste
     {
         return Paste::query()->create([
-            'user_id' => $request->user()->id,
+            'paste_name' => $pasteDTO->pasteName,
+            'paste_code' => $pasteDTO->pasteCode,
+            'paste_format' => $pasteDTO->pasteFormat,
+            'paste_private' => $pasteDTO->pastePrivate,
+            'paste_expire_date' => $pasteDTO->expireDate,
+            'user_id' => $pasteDTO->userKey,
             'url' => $url,
         ]);
     }

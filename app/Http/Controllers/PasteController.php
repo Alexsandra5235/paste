@@ -39,13 +39,17 @@ class PasteController extends Controller
             $request->expire_date
         );
 
+        if(!$request->check_private){
+            $pasteDTO->userKey = $request->user()->api_key;
+        }
+
         $response = $this->pasteService->createPaste($pasteDTO, $request);
 
         if(empty($response)){
             return redirect()->back()->with('errors','Ошибка запроса.');
         }
         else {
-            $this->pasteService->createPasteDB($request,$response);
+            $this->pasteService->createPasteDB($pasteDTO,$response);
             return redirect()->back()->with('success','Паста успешно загружена.')->with('paste',$response);
         }
     }
