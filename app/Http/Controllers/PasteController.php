@@ -9,6 +9,7 @@ use App\Service\PasteService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use function Pest\Laravel\withMiddleware;
 
 class PasteController extends Controller
@@ -53,6 +54,9 @@ class PasteController extends Controller
                 'error' => implode(', ', $response),
             ]);
         }
+        if($pasteDTO->userKey){
+            $this->pasteService->createPaste($pasteDTO, $response['paste_url']);
+        }
         return redirect()->back()->with([
             'success' => $response['paste_url'],
         ]);
@@ -67,18 +71,26 @@ class PasteController extends Controller
      */
     public function getPasteByUser() : object
     {
-        $response = $this->pasteApiService->getPasteByUser();
+        if(Auth::user()->api_key){
+            $response = $this->pasteApiService->getPasteByUser();
 
-        if (isset($response['status']) && $response['status'] === 'error') {
+            if (isset($response['status']) && $response['status'] === 'error') {
+                return view('paste.pastesUser', [
+                    'pastes' => [],
+                    'error' => $response['message']
+                ]);
+            }
+            return view('paste.pastesUser', [
+                'pastes' => $response,
+                'error' => ''
+            ]);
+        } else {
             return view('paste.pastesUser', [
                 'pastes' => [],
-                'error' => $response['message']
+                'error' => 'Ваш аккаунт не авторизирован в системе Pastebin.'
             ]);
         }
-        return view('paste.pastesUser', [
-            'pastes' => $response,
-            'error' => ''
-        ]);
+
     }
 
     public function test(Request $request) : object
