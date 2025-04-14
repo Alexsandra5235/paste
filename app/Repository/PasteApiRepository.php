@@ -115,4 +115,30 @@ class PasteApiRepository implements PasteApiRepositoryInterface
 //        dd($pastes);
         return $pastes;
     }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function delete(string $user_key, string $paste_key): array
+    {
+        $response = Http::asForm()->post(env('PASTEBIN_USER_PASTE_URL'), [
+            'api_dev_key' => env('PASTEBIN_API_KEY'),
+            'api_user_key' => $user_key,
+            'api_paste_key' => $paste_key,
+            'api_option' => 'delete',
+        ]);
+
+        if (str_contains($response->body(), 'Bad API request')) {
+            return [
+                'status' => 'error',
+                'message' => 'Bad API request. Please try again later.',
+                'error' => $response->body()
+            ];
+        } else {
+            return [
+                'status' => 'success',
+                'message' => $response->body(),
+            ];
+        }
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\DTO\PasteDTO;
+use App\Models\User;
 use App\Repository\PasteApiRepository;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
@@ -11,12 +12,17 @@ use Illuminate\Support\Facades\Auth;
 class PasteApiService
 {
     protected PasteApiRepository $pasteApiRepository;
+    protected ReportService $reportService;
+    protected InfoPasteService $infoPasteService;
     /**
      * Create a new class instance.
      */
-    public function __construct(PasteApiRepository $pasteApiRepository)
+    public function __construct(PasteApiRepository $pasteApiRepository, ReportService $reportService,
+                                InfoPasteService $infoPasteService)
     {
         $this->pasteApiRepository = $pasteApiRepository;
+        $this->reportService = $reportService;
+        $this->infoPasteService = $infoPasteService;
     }
 
     /**
@@ -59,5 +65,17 @@ class PasteApiService
     public function findAll() : array
     {
         return $this->pasteApiRepository->findAll();
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function delete(string $paste_url): array
+    {
+        $user_key = $this->infoPasteService->getUserKeyByUrl($paste_url);
+        $response = $this->pasteApiRepository->delete($user_key, basename($paste_url));
+        $this->reportService->deleteByUrl($paste_url);
+
+        return $response;
     }
 }

@@ -3,13 +3,27 @@
 namespace App\Orchid\Screens;
 
 use App\Models\Report;
+use App\Models\User;
+use App\Repository\PasteApiRepository;
+use App\Repository\ReportRepository;
+use App\Service\PasteApiService;
+use App\Service\ReportService;
+use Illuminate\Http\Client\ConnectionException;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
 use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class ReportScreen extends Screen
 {
+    protected PasteApiService $pasteApiService;
+    public function __construct(PasteApiService $pasteApiService)
+    {
+        $this->pasteApiService = $pasteApiService;
+    }
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -59,11 +73,35 @@ class ReportScreen extends Screen
                 TD::make('reason', 'Описание'),
                 TD::make('created_at', 'Создано')->sort(),
                 TD::make('updated_at', 'Обновлено')->sort(),
-                TD::make('actions', 'Действия')->render(function (Report $complaint) {
-                    return Link::make('Просмотреть')
-                        ->route('platform.reports', $complaint->id);
-                }),
+                TD::make('complaints_count', 'Количество жалоб на данную пасту')
+                ->render(fn (Report $report) => $report->countReport($report->paste_url)),
+                TD::make('actions', 'Действия')->render(fn (Report $report) => DropDown::make()
+                    ->icon('bs.three-dots-vertical')
+                    ->list([
+                        Link::make(__('Открыть пасту'))
+                            ->href($report->paste_url)
+                            ->target('_blank'),
+                        Button::make(__('Удалить'))
+                            ->icon('bs.trash3')
+                            ->confirm(__('После удаления пасты все её ресурсы и данные будут безвозвратно удалены. '))
+                            ->method('remove', [
+                                'paste_url' => $report->paste_url,
+                            ]),
+                    ]))
             ]),
         ];
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function remove(string $paste_url): void
+    {
+        $request = $this->pasteApiService->delete($paste_url);
+
+        if(!array_key_exists('error', $request)){
+            Toast::info(__('Pastes was removed'));
+        }
+
     }
 }

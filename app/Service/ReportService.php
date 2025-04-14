@@ -21,4 +21,8 @@ class ReportService
     {
         return $this->reportRepository->create($request);
     }
+    public function deleteByUrl(string $paste_url): void
+    {
+        $this->reportRepository->deleteByUrl($paste_url);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Interfaces\ReportRepositoryInterface;
+use App\Models\Paste;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,5 +25,10 @@ class ReportRepository implements ReportRepositoryInterface
             'paste_url' => $request->get('paste_url'),
             'reason' => $request->get('reason'),
         ]);
+    }
+
+    public function deleteByUrl(string $paste_url): void
+    {
+        Report::query()->where('paste_url', $paste_url)->delete();
     }
 }

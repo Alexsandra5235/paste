@@ -22,6 +22,13 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
+
+        Schema::create('info_pastes', function (Blueprint $table) {
+            $table->id();
+            $table->string('paste_url');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**

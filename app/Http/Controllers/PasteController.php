@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DTO\PasteDTO;
+use App\Models\InfoPastes;
 use App\Models\Paste;
+use App\Service\InfoPasteService;
 use App\Service\PasteApiService;
 use App\Service\PasteService;
 use Illuminate\Http\Client\ConnectionException;
@@ -16,10 +18,13 @@ class PasteController extends Controller
 {
     protected PasteService $pasteService;
     protected PasteApiService $pasteApiService;
+    protected InfoPasteService $infoPasteService;
 
-    public function __construct(PasteService $pasteService, PasteApiService $pasteApiService){
+    public function __construct(PasteService $pasteService, PasteApiService $pasteApiService,
+                                InfoPasteService $infoPasteService){
         $this->pasteService = $pasteService;
         $this->pasteApiService = $pasteApiService;
+        $this->infoPasteService = $infoPasteService;
     }
 
     /**
@@ -56,6 +61,7 @@ class PasteController extends Controller
         }
         if($pasteDTO->userKey){
             $this->pasteService->createPaste($pasteDTO, $response['paste_url']);
+            $this->infoPasteService->create($response['paste_url']);
         }
         return redirect()->back()->with([
             'success' => $response['paste_url'],
@@ -90,6 +96,14 @@ class PasteController extends Controller
         $this->pasteService->createPaste($pasteDTO, 'https://example.com');
 
         return redirect()->back();
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function delete(int $user_key, string $paste_key): void
+    {
+        $this->pasteApiService->delete($user_key, $paste_key);
     }
 
 }

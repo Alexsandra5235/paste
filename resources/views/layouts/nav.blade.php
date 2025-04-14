@@ -5,9 +5,16 @@
             <span class="fs-4">Simple header</span>
         </a>
 
-        <ul class="nav nav-pills">
+        <ul class="nav nav-pills me-3">
             <li class="nav-item"><a href="{{ route('dashboard') }}" class="nav-link active" aria-current="page">Home</a></li>
         </ul>
+
+        @if(Auth::user()->inRole('admin'))
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a href="/admin" class="nav-link active" aria-current="page">Admin panel</a></li>
+            </ul>
+        @endif
+
         <div class="dropdown text-end mt-2 mx-3">
             <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ Auth::user()->name }}
