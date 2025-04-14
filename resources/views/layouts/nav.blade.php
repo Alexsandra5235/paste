@@ -18,9 +18,13 @@
                 <li><a class="dropdown-item" href="{{ route('paste.user.index') }}">Авторизовать профиль Pastebin</a></li>
             </ul>
         </div>
-        <form class="nav-item mt-2" method="post" action="{{ route('logout') }}">
+        <form class="nav-item mt-2 me-2" method="post" action="{{ route('logout') }}">
             @csrf
             <input type="submit" value="Выйти">
+        </form>
+        <form class="nav-item mt-2" method="post" action="{{ route('user.pastes') }}">
+            @csrf
+            <input type="submit" value="Мои пасты">
         </form>
     </header>
 </div>

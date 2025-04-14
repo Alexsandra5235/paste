@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\DTO\PasteDTO;
 use App\Interfaces\PasteApiRepositoryInterface;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class PasteApiRepository implements PasteApiRepositoryInterface
@@ -18,10 +19,36 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     }
 
 
-
-    public function getPasteByUser($userId): array
+    /**
+     * @throws ConnectionException
+     */
+    public function getPasteByUser(): array
     {
-        // TODO: Implement getPasteByUser() method.
+        $response = Http::asForm()->post(env('PASTEBIN_USER_PASTE_URL'), [
+            'api_dev_key' => env('PASTEBIN_API_KEY'),
+            'api_user_key' => Auth::user()->api_key,
+            'api_option' => 'list'
+        ]);
+
+        if($response->successful()) {
+            if (stripos($response, '<paste>') !== false) {
+                $response = "<pastes>{$response}</pastes>";
+                $xmlObject = simplexml_load_string($response);
+                $pastesArray = json_decode(json_encode($xmlObject), true);
+                return $pastesArray['paste'];
+            } else {
+                return [
+                    'status' => 'error',
+                    'message' => 'No pastes found.'
+                ];
+            }
+        } else {
+            return [
+                'status' => 'error',
+                'message' => 'Unable to fetch pastes. Please try again later.',
+                'error' => $response->body()
+            ];
+        }
     }
 
     /**

@@ -61,6 +61,25 @@ class PasteController extends Controller
         return view('paste.pasteStore');
     }
 
+    /**
+     * @throws ConnectionException
+     */
+    public function getPasteByUser() : object
+    {
+        $response = $this->pasteApiService->getPasteByUser();
+
+        if (isset($response['status']) && $response['status'] === 'error') {
+            return view('pastesUser', [
+                'pastes' => [],
+                'error' => $response['message']
+            ]);
+        }
+
+        return view('pastesUser', [
+            'pastes' => $response
+        ]);
+    }
+
     public function test(Request $request) : object
     {
 

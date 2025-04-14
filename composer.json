@@ -15,7 +15,8 @@
         "socialiteproviders/google": "^4.1",
         "socialiteproviders/vkontakte": "^5.0",
         "socialiteproviders/yandex": "^4.1",
-        "ext-http": "*"
+        "ext-http": "*",
+        "ext-simplexml": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

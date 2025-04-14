@@ -26,12 +26,14 @@ Route::middleware(UnbanUser::class)->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-//        Route::post('/paste', [PasteController::class, 'store'])->name('paste.store');
-        Route::post('/paste', [PasteController::class, 'test'])->name('paste.store');
+        Route::post('/paste', [PasteController::class, 'store'])->name('paste.store');
+//        Route::post('/paste', [PasteController::class, 'test'])->name('paste.store');
         Route::get('/paste', [PasteController::class, 'index'])->name('paste.index');
 
         Route::post('/paste/user',[UserController::class, 'store'])->name('paste.user.store');
         Route::get('/paste/user',[UserController::class, 'login'])->name('paste.user.index');
+
+        Route::post('/user/pastes',[PasteController::class, 'getPasteByUser'])->name('user.pastes');
     });
 
 

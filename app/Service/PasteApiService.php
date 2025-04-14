@@ -25,4 +25,12 @@ class PasteApiService
     {
         return $this->pasteApiRepository->create($pasteDTO);
     }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function getPasteByUser() : array
+    {
+        return $this->pasteApiRepository->getPasteByUser();
+    }
 }
