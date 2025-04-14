@@ -30,10 +30,10 @@ class PasteApiService
     /**
      * @throws ConnectionException
      */
-    public function getPasteByUser() : array
+    public function getPasteByUser(string $user_key) : array
     {
         if(Auth::user()->api_key){
-            $response = $this->pasteApiRepository->getPasteByUser();
+            $response = $this->pasteApiRepository->getPasteByUser($user_key);
 
             if (isset($response['status']) && $response['status'] === 'error') {
                 return [
@@ -51,5 +51,13 @@ class PasteApiService
                 'error' => 'Ваш аккаунт не авторизирован в системе Pastebin.'
             ];
         }
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function findAll() : array
+    {
+        return $this->pasteApiRepository->findAll();
     }
 }

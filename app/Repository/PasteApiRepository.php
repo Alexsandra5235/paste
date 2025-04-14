@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\DTO\PasteDTO;
 use App\Interfaces\PasteApiRepositoryInterface;
+use App\Models\User;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -23,11 +24,11 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     /**
      * @throws ConnectionException
      */
-    public function getPasteByUser(): array
+    public function getPasteByUser(string $user_key): array
     {
         $response = Http::asForm()->post(env('PASTEBIN_USER_PASTE_URL'), [
             'api_dev_key' => env('PASTEBIN_API_KEY'),
-            'api_user_key' => Auth::user()->api_key,
+            'api_user_key' => $user_key,
             'api_option' => 'list'
         ]);
 
@@ -48,7 +49,6 @@ class PasteApiRepository implements PasteApiRepositoryInterface
                 if ($isArray){
                     array_splice($pastesArray['paste'], 1);
                 }
-
                 return $pastesArray;
             } else {
                 return [
@@ -94,5 +94,25 @@ class PasteApiRepository implements PasteApiRepositoryInterface
                 'paste_url' => $response->body()
             ];
         }
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function findAll(): array
+    {
+        $pastes = [];
+        foreach (User::all() as $user) {
+
+            if($user->api_key != null){
+                $userPaste = $this->getPasteByUser($user->api_key);
+
+                if(!array_key_exists('status',$userPaste)){
+                    $pastes["user.$user->id"] = $userPaste;
+                }
+            }
+        }
+//        dd($pastes);
+        return $pastes;
     }
 }

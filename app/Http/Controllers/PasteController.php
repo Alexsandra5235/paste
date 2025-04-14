@@ -71,7 +71,7 @@ class PasteController extends Controller
      */
     public function getPasteByUser() : object
     {
-        $response = $this->pasteApiService->getPasteByUser();
+        $response = $this->pasteApiService->getPasteByUser(Auth::user()->api_key);
 
         return view('paste.pastesUser', ['response' => $response]);
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthSessionController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\PasteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -14,9 +15,7 @@ Route::middleware(UnbanUser::class)->group(function () {
         return view('welcome');
     });
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', [MainController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::get('/login/yandex', [AuthSessionController::class, 'yandex'])->name('yandex');
     Route::get('/login/yandex/redirect', [AuthSessionController::class, 'yandexRedirect'])->name('yandexRedirect');

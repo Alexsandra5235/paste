@@ -8,6 +8,7 @@ use App\Repository\PasteApiRepository;
 use App\Repository\PasteRepository;
 use App\Service\PasteApiService;
 use App\Service\PasteService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -45,10 +46,10 @@ class AppServiceProvider extends ServiceProvider
             $latestPastes = $this->pasteRepository->findAll();
             $view->with(['latestPastes' => $latestPastes,'nowDate' => now()]);
         });
-//        View::composer('*', function ($view) {
-//            $latestPastes = $this->pasteApiService->getPasteByUser();
-//            $topPastes = array_slice($latestPastes['pastes'], 0, 10);
-//            $view->with(['latestUserPastes' => $topPastes, 'nowDate' => now()]);
-//        });
+        View::composer('layouts.myPaste', function ($view) {
+            $latestPastes = $this->pasteApiService->getPasteByUser(Auth::user()->api_key);
+            $topPastes = array_slice($latestPastes['pastes'], 0, 10);
+            $view->with(['latestUserPastes' => $topPastes, 'nowDate' => now()]);
+        });
     }
 }
