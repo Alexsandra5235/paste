@@ -63,7 +63,6 @@ class UserListLayout extends Table
                 ->align(TD::ALIGN_RIGHT)
                 ->sort(),
 
-            // Новое поле для статуса бана
             TD::make(__('Banned'), 'Бан')
                 ->render(fn (User $user) => ($user->is_banned == 0 ? 'Нет' : 'Да'))
                 ->align(TD::ALIGN_CENTER)
