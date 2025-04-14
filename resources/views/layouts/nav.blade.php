@@ -23,9 +23,5 @@
             @csrf
             <input type="submit" value="Выйти">
         </form>
-{{--        <form class="nav-item mt-2" method="post" action="{{ route('user.pastes') }}">--}}
-{{--            @csrf--}}
-{{--            <input type="submit" value="Мои пасты">--}}
-{{--        </form>--}}
     </header>
 </div>
