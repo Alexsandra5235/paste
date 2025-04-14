@@ -2,23 +2,23 @@
     <div class="container">
         <strong class="justify-content-center my-5">Your Pastes</strong>
 
-        @if($error != '')
+        @if($response['error'] != '')
             <div class="card mb">
                 <div class="card-header">
                     Уведомление
                 </div>
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
-                        <p>{{ $error }}</p>
+                        <p>{{ $response['error'] }}</p>
                     </blockquote>
                 </div>
             </div>
         @endif
 
-        @if(count($pastes) > 0)
+        @if(count($response['pastes']) > 0)
             <div class="list-group">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    @foreach($pastes as $paste)
+                    @foreach($response['pastes'] as $paste)
                         <div class="col">
                             <div class="card shadow-sm" style="height: 100%">
                                 <div class="card-header">

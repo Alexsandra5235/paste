@@ -6,6 +6,7 @@ use App\DTO\PasteDTO;
 use App\Repository\PasteApiRepository;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PasteApiService
 {
@@ -31,6 +32,24 @@ class PasteApiService
      */
     public function getPasteByUser() : array
     {
-        return $this->pasteApiRepository->getPasteByUser();
+        if(Auth::user()->api_key){
+            $response = $this->pasteApiRepository->getPasteByUser();
+
+            if (isset($response['status']) && $response['status'] === 'error') {
+                return [
+                    'pastes' => [],
+                    'error' => $response['message']
+                ];
+            }
+            return [
+                'pastes' => $response,
+                'error' => ''
+            ];
+        } else {
+            return [
+                'pastes' => [],
+                'error' => 'Ваш аккаунт не авторизирован в системе Pastebin.'
+            ];
+        }
     }
 }

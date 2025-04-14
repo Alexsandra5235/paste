@@ -39,5 +39,9 @@ class AppServiceProvider extends ServiceProvider
             $latestPastes = $this->pasteRepository->findAll();
             $view->with(['latestPastes' => $latestPastes,'nowDate' => now()]);
         });
+        View::composer('*', function ($view) {
+            $latestPastes = $this->pasteRepository->findAll();
+            $view->with(['latestUserPastes' => $latestPastes,'nowDate' => now()]);
+        });
     }
 }
