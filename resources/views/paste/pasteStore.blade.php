@@ -45,8 +45,11 @@
                 <label for="paste_private">Тип доступа</label>
                 <select class="form-control" id="paste_private" name="paste_private" required>
                     <option value="0">Public</option>
+                    @if(Auth::user()->api_key)
+                        <option value="2">Private</option>
+                    @endif
                     <option value="1">Unlisted</option>
-                    <option value="2">Private</option>
+
                 </select>
             </div>
 
