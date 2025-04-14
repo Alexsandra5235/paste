@@ -9,7 +9,7 @@ use App\Orchid\Screens\User\UserEditScreen;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware([UnbanUser::class])->group(function () {
+Route::middleware(UnbanUser::class)->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });

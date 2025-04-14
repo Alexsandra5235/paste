@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\LatestPastes;
 use App\Http\Middleware\UnbanUser;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
