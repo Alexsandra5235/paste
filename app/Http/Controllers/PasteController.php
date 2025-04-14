@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTO\PasteDTO;
 use App\Models\Paste;
+use App\Service\PasteApiService;
 use App\Service\PasteService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
@@ -13,9 +14,11 @@ use function Pest\Laravel\withMiddleware;
 class PasteController extends Controller
 {
     protected PasteService $pasteService;
+    protected PasteApiService $pasteApiService;
 
-    public function __construct(PasteService $pasteService){
+    public function __construct(PasteService $pasteService, PasteApiService $pasteApiService){
         $this->pasteService = $pasteService;
+        $this->pasteApiService = $pasteApiService;
     }
 
     /**
@@ -43,14 +46,14 @@ class PasteController extends Controller
             $pasteDTO->userKey = $request->user()->api_key;
         }
 
-        $response = $this->pasteService->createPaste($pasteDTO, $request);
+        $response_url = $this->pasteApiService->createPaste($pasteDTO);
 
         if(empty($response)){
             return redirect()->back()->with('errors','Ошибка запроса.');
         }
         else {
-            $this->pasteService->createPasteDB($pasteDTO,$response);
-            return redirect()->back()->with('success','Паста успешно загружена.')->with('paste',$response);
+            $this->pasteService->createPaste($pasteDTO,$response_url);
+            return redirect()->back()->with('success','Паста успешно загружена.')->with('paste',$response_url);
         }
     }
     public function index() : object
@@ -69,7 +72,7 @@ class PasteController extends Controller
             $request->expire_date
         );
 
-        $this->pasteService->createPasteDB($pasteDTO, 'https://example.com');
+        $this->pasteService->createPaste($pasteDTO, 'https://example.com');
 
         return redirect()->back();
     }

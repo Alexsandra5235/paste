@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 
 class PasteService
 {
@@ -20,23 +21,14 @@ class PasteService
     {
         $this->pasteRepository = $pasteRepository;
     }
-
-    /**
-     * @throws ConnectionException
-     */
-    public function createPaste(PasteDTO $pasteDTO, Request $request): string
+    public function createPaste(PasteDTO $pasteDTO, string $url) : Paste | null
     {
-        return $this->pasteRepository->create($pasteDTO);
-    }
-    public function createPasteDB(PasteDTO $pasteDTO, string $url) : Paste | null
-    {
-//        $this->deleteExpired();
         if($pasteDTO->pastePrivate != 0) return null;
 
         if(Paste::query()->count() >= 10){
             Paste::query()->orderBy('created_at')->first()->delete();
         }
-        return $this->pasteRepository->createDB($url, $pasteDTO);
+        return $this->pasteRepository->create($url, $pasteDTO);
     }
     public function deleteExpired(): void
     {
