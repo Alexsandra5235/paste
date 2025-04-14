@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthSessionController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PasteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\UnbanUser;
 use App\Orchid\Screens\User\UserEditScreen;
@@ -33,6 +34,9 @@ Route::middleware(UnbanUser::class)->group(function () {
         Route::get('/paste/user',[UserController::class, 'login'])->name('paste.user.index');
 
         Route::get('/user/pastes',[PasteController::class, 'getPasteByUser'])->name('user.pastes');
+
+        Route::get('/report/store/{url}',[ReportController::class, 'index'])->name('report.index');
+        Route::post('/report/store',[ReportController::class, 'store'])->name('report.store');
     });
 
 

@@ -47,8 +47,13 @@ class AppServiceProvider extends ServiceProvider
             $view->with(['latestPastes' => $latestPastes,'nowDate' => now()]);
         });
         View::composer('layouts.myPaste', function ($view) {
-            $latestPastes = $this->pasteApiService->getPasteByUser(Auth::user()->api_key);
-            $topPastes = array_slice($latestPastes['pastes'], 0, 10);
+            if(Auth::user()->api_key == null){
+                $topPastes = [];
+            } else{
+                $latestPastes = $this->pasteApiService->getPasteByUser(Auth::user()->api_key);
+                $topPastes = array_slice($latestPastes['pastes'], 0, 10);
+            }
+
             $view->with(['latestUserPastes' => $topPastes, 'nowDate' => now()]);
         });
     }

@@ -30,6 +30,11 @@
                 <div class="dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <h1 class="р1 text-center mb-3">Все пасты</h1>
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                <p>{{ session('success') }}</p>
+                            </div>
+                        @endif
                         <div class="list-group">
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                                 @if($pastes != [])
@@ -51,7 +56,7 @@
                                                         <p class="card-text">Hits: {{ $paste['paste_hits'] }}</p>
                                                         <div class="input-group" style="width: 100%">
                                                             <a href="{{ $paste['paste_url'] }}" class="btn btn-primary">View Paste</a>
-                                                            <a href="" class="btn btn-danger">Ban paste</a>
+                                                            <a href="{{ route('report.index',['url' => $paste['paste_key']]) }}" class="btn btn-danger">Ban paste</a>
                                                         </div>
                                                     </div>
                                                 </div>
