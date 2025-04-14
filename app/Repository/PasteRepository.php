@@ -11,6 +11,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class PasteRepository implements PasteRepositoryInterface
@@ -44,7 +45,7 @@ class PasteRepository implements PasteRepositoryInterface
             'paste_format' => $pasteDTO->pasteFormat,
             'paste_private' => $pasteDTO->pastePrivate,
             'paste_expire_date' => $pasteDTO->expireDate,
-            'user_id' => $pasteDTO->userKey,
+            'user_id' => Auth::id(),
             'url' => $url,
         ]);
     }

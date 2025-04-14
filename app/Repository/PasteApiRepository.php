@@ -7,6 +7,7 @@ use App\Interfaces\PasteApiRepositoryInterface;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use function Pest\Laravel\delete;
 
 class PasteApiRepository implements PasteApiRepositoryInterface
 {
@@ -30,13 +31,25 @@ class PasteApiRepository implements PasteApiRepositoryInterface
             'api_option' => 'list'
         ]);
 
-
         if($response->successful()) {
             if (stripos($response, '<paste>') !== false) {
-                $response = "<pastes>{$response}</pastes>";
+
+                $isArray = substr_count($response, '<paste>') === 1;
+
+                if($isArray){
+                    $response = "<pastes>{$response}{$response}</pastes>";
+                } else{
+                    $response = "<pastes>{$response}</pastes>";
+                }
+
                 $xmlObject = simplexml_load_string($response);
                 $pastesArray = json_decode(json_encode($xmlObject), true);
-                return $pastesArray['paste'];
+
+                if ($isArray){
+                    array_splice($pastesArray['paste'], 1);
+                }
+
+                return $pastesArray;
             } else {
                 return [
                     'status' => 'error',

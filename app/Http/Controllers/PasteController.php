@@ -71,30 +71,9 @@ class PasteController extends Controller
      */
     public function getPasteByUser() : object
     {
-//        if(Auth::user()->api_key){
-//            $response = $this->pasteApiService->getPasteByUser();
-//
-//            if (isset($response['status']) && $response['status'] === 'error') {
-//                return view('paste.pastesUser', [
-//                    'pastes' => [],
-//                    'error' => $response['message']
-//                ]);
-//            }
-//            return view('paste.pastesUser', [
-//                'pastes' => $response,
-//                'error' => ''
-//            ]);
-//        } else {
-//            return view('paste.pastesUser', [
-//                'pastes' => [],
-//                'error' => 'Ваш аккаунт не авторизирован в системе Pastebin.'
-//            ]);
-//        }
         $response = $this->pasteApiService->getPasteByUser();
 
         return view('paste.pastesUser', ['response' => $response]);
-
-
     }
 
     public function test(Request $request) : object
