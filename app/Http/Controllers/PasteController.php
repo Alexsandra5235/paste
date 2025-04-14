@@ -69,14 +69,14 @@ class PasteController extends Controller
         $response = $this->pasteApiService->getPasteByUser();
 
         if (isset($response['status']) && $response['status'] === 'error') {
-            return view('pastesUser', [
+            return view('paste.pastesUser', [
                 'pastes' => [],
                 'error' => $response['message']
             ]);
         }
-
-        return view('pastesUser', [
-            'pastes' => $response
+        return view('paste.pastesUser', [
+            'pastes' => $response,
+            'error' => ''
         ]);
     }
 

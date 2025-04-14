@@ -30,6 +30,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
             'api_option' => 'list'
         ]);
 
+
         if($response->successful()) {
             if (stripos($response, '<paste>') !== false) {
                 $response = "<pastes>{$response}</pastes>";

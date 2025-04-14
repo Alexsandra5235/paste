@@ -16,15 +16,16 @@
                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Профиль</a></li>
                 <li><a class="dropdown-item" href="{{ route('paste.index') }}">Добавить новую пасту</a></li>
                 <li><a class="dropdown-item" href="{{ route('paste.user.index') }}">Авторизовать профиль Pastebin</a></li>
+                <li><a class="dropdown-item" href="{{ route('user.pastes') }}">Мои Pastes</a></li>
             </ul>
         </div>
         <form class="nav-item mt-2 me-2" method="post" action="{{ route('logout') }}">
             @csrf
             <input type="submit" value="Выйти">
         </form>
-        <form class="nav-item mt-2" method="post" action="{{ route('user.pastes') }}">
-            @csrf
-            <input type="submit" value="Мои пасты">
-        </form>
+{{--        <form class="nav-item mt-2" method="post" action="{{ route('user.pastes') }}">--}}
+{{--            @csrf--}}
+{{--            <input type="submit" value="Мои пасты">--}}
+{{--        </form>--}}
     </header>
 </div>

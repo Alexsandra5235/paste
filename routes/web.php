@@ -33,7 +33,7 @@ Route::middleware(UnbanUser::class)->group(function () {
         Route::post('/paste/user',[UserController::class, 'store'])->name('paste.user.store');
         Route::get('/paste/user',[UserController::class, 'login'])->name('paste.user.index');
 
-        Route::post('/user/pastes',[PasteController::class, 'getPasteByUser'])->name('user.pastes');
+        Route::get('/user/pastes',[PasteController::class, 'getPasteByUser'])->name('user.pastes');
     });
 
 
