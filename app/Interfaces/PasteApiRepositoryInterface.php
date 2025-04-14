@@ -6,6 +6,6 @@ use App\DTO\PasteDTO;
 
 interface PasteApiRepositoryInterface
 {
-    public function create(PasteDTO $pasteDTO) : string;
+    public function create(PasteDTO $pasteDTO) : array;
     public function getPasteByUser() : array;
 }

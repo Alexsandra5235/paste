@@ -20,7 +20,7 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     @foreach($pastes as $paste)
                         <div class="col">
-                            <div class="card shadow-sm">
+                            <div class="card shadow-sm" style="height: 100%">
                                 <div class="card-header">
                                     Title: {{ $paste['paste_title'] }}
                                 </div>

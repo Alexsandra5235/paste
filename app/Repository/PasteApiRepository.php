@@ -55,7 +55,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     /**
      * @throws ConnectionException
      */
-    public function create(PasteDTO $pasteDTO): string
+    public function create(PasteDTO $pasteDTO): array
     {
         $response = Http::asForm()->post(env('PASTEBIN_URL'), [
             'api_dev_key' => env('PASTEBIN_API_KEY'),
@@ -68,11 +68,18 @@ class PasteApiRepository implements PasteApiRepositoryInterface
             'api_paste_format' => $pasteDTO->pasteFormat,
         ]);
 
-
-        if ($response->successful()) {
-            return $response;
+        if (str_contains($response->body(), 'Bad API request')) {
+            return [
+                'status' => 'error',
+                'message' => 'Bad API request. Please try again later.',
+                'error' => $response->body()
+            ];
         } else {
-            return '';
+            return [
+                'status' => 'success',
+                'message' => 'Successfully created paste.',
+                'paste_url' => $response->body()
+            ];
         }
     }
 }

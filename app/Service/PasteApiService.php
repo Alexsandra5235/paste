@@ -21,7 +21,7 @@ class PasteApiService
     /**
      * @throws ConnectionException
      */
-    public function createPaste(PasteDTO $pasteDTO): string
+    public function createPaste(PasteDTO $pasteDTO): array
     {
         return $this->pasteApiRepository->create($pasteDTO);
     }

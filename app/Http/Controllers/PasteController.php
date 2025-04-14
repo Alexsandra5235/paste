@@ -46,15 +46,16 @@ class PasteController extends Controller
             $pasteDTO->userKey = $request->user()->api_key;
         }
 
-        $response_url = $this->pasteApiService->createPaste($pasteDTO);
+        $response = $this->pasteApiService->createPaste($pasteDTO);
 
-        if(empty($response)){
-            return redirect()->back()->with('errors','Ошибка запроса.');
+        if (isset($response['status']) && $response['status'] === 'error') {
+            return redirect()->back()->with([
+                'error' => implode(', ', $response),
+            ]);
         }
-        else {
-            $this->pasteService->createPaste($pasteDTO,$response_url);
-            return redirect()->back()->with('success','Паста успешно загружена.')->with('paste',$response_url);
-        }
+        return redirect()->back()->with([
+            'success' => $response['paste_url'],
+        ]);
     }
     public function index() : object
     {

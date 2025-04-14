@@ -3,14 +3,15 @@
     <div class="container mb-4">
         @if(session('success'))
             <div class="alert alert-success">
-                <p>{{ session('success') }}</p>
-                <p>Посмотреть пасту можно по ссылке: <a class="link-info" href="{{ session('paste') }}" target="_blank" rel="noopener noreferrer">Нажми, чтобы перейти</a></p>
+                <p>Successfully created paste.</p>
+                <p>Посмотреть пасту можно по ссылке: <a class="link-info" href="{{ session('success') }}" target="_blank" rel="noopener noreferrer">Нажми, чтобы перейти</a></p>
+                <small>Сохраните эту ссылку, если вы выбрали пункт загрузить анонимно, в противном случае ссылка будет утеряна. Если загружали пасту со своего аккаунта, то посмотреть ее можно в специальном пункте меню или <a class="link-info" href="{{ route('user.pastes') }}">перейдя по ссылке.</a> </small>
             </div>
         @endif
 
-        @if(session('errors'))
+        @if(session('error'))
             <div class="alert alert-danger">
-                {{ session('errors') }}
+                <p>{{ session('error') }}</p>
             </div>
         @endif
         <h1 class="my-2 text-center">Создать новую пасту</h1>
