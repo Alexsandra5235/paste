@@ -19,10 +19,16 @@ class UserService
     }
 
     /**
+     * Авторизация пользователя в аккаунте Pastebin. При
+     * успехе возвращается ключ пользователя. При неудаче null.
+     * @param UserDTO $user
+     * @return string|null
      * @throws ConnectionException
      */
-    public function createUser(UserDTO $user) : string
+    public function createUser(UserDTO $user) : ?string
     {
-        return $this->userRepository->create($user);
+        $user_key = $this->userRepository->create($user);
+        if($user_key) return $user_key;
+        return null;
     }
 }

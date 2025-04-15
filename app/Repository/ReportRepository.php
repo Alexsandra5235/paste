@@ -22,6 +22,8 @@ class ReportRepository implements ReportRepositoryInterface
     }
 
     /**
+     * Добавление в базу данных жалобы на пасту.
+     * Возвращает созданную жалобу.
      * @param Request $request
      * @return Report
      */
@@ -35,12 +37,17 @@ class ReportRepository implements ReportRepositoryInterface
     }
 
     /**
+     * Удаление жалобы из базы данных. Если удаление прошло успешно,
+     * вернет true, в противном случае false.
      * @param string $paste_url
-     * @return void
+     * @return bool
      */
-    public function deleteByUrl(string $paste_url): void
+    public function deleteByUrl(string $paste_url): bool
     {
-        Report::query()->where('paste_url', $paste_url)->delete();
+        $report = Report::query()->where('paste_url', $paste_url)->first();
+        if(!$report) return false;
+        $report->delete();
+        return true;
     }
 
 }

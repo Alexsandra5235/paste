@@ -2,16 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Paste;
-use App\Models\User;
-use App\Repository\InfoPasteRepository;
 use App\Repository\PasteApiRepository;
-use App\Repository\PasteRepository;
 use App\Repository\ReportRepository;
-use App\Service\InfoPasteService;
 use App\Service\PasteApiService;
-use App\Service\PasteService;
 use App\Service\ReportService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
@@ -38,21 +33,10 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(InfoPasteRepository::class, function ($app) {
-            return new InfoPasteRepository();
-        });
-
-        $this->app->singleton(InfoPasteService::class, function ($app) {
-            return new InfoPasteService(
-                $app->make(InfoPasteRepository::class)
-            );
-        });
-
         $this->app->singleton(PasteApiService::class, function ($app) {
             return new PasteApiService(
                 $app->make(PasteApiRepository::class),
                 $app->make(ReportService::class),
-                $app->make(InfoPasteService::class),
             );
         });
     }
@@ -67,21 +51,15 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('layouts.paste', function ($view) {
-            $pasteService = app(PasteService::class);
-            $pasteService->deleteExpired();
             $latestPastes = app(PasteApiRepository::class)->findLastPastes();
-            $view->with(['latestPastes' => $latestPastes,'nowDate' => now()]);
+            $view->with(['latestPastes' => $latestPastes,'now' => Carbon::now()]);
         });
 
         View::composer('layouts.myPaste', function ($view) {
-            if(Auth::user()->api_key == null){
-                $topPastes = [];
-            } else{
-                $latestPastes = app(PasteApiService::class)->getPasteByUser(Auth::user()->api_key);
-                $topPastes = array_slice($latestPastes['pastes'], 0, 10);
-            }
-
-            $view->with(['latestUserPastes' => $topPastes, 'nowDate' => now()]);
+            $latestPastes = app(PasteApiService::class)->getPastesByUser(null);
+            $splicePaste = array_splice($latestPastes['pastes']['paste'], 0, 10);
+            $latestPastes['pastes']['paste'] = $splicePaste;
+            $view->with(['latestUserPastes' => $latestPastes['pastes'], 'now' => Carbon::now()]);
         });
     }
 }

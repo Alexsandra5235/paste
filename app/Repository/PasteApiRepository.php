@@ -6,10 +6,14 @@ use App\DTO\PasteDTO;
 use App\Interfaces\PasteApiRepositoryInterface;
 use App\Models\User;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use function Pest\Laravel\delete;
 
+/**
+ *
+ */
 class PasteApiRepository implements PasteApiRepositoryInterface
 {
     /**
@@ -22,7 +26,11 @@ class PasteApiRepository implements PasteApiRepositoryInterface
 
 
     /**
-     * @throws ConnectionException
+     * Получение паст пользователя через api.
+     * Преобразование xml в массив с данными.
+     * @param string $user_key
+     * @return array
+     *@throws ConnectionException
      */
     public function getPasteByUser(string $user_key): array
     {
@@ -35,22 +43,8 @@ class PasteApiRepository implements PasteApiRepositoryInterface
         if($response->successful()) {
             if (stripos($response, '<paste>') !== false) {
 
-                $isArray = substr_count($response, '<paste>') === 1;
+                return $this->toArray($response);
 
-                if($isArray){
-                    $response = "<pastes>{$response}{$response}</pastes>";
-                } else{
-                    $response = "<pastes>{$response}</pastes>";
-                }
-
-                $xmlObject = simplexml_load_string($response);
-                $pastesArray = json_decode(json_encode($xmlObject), true);
-
-                if ($isArray){
-                    array_splice($pastesArray['paste'], 1);
-                }
-
-                return $pastesArray;
             } else {
                 return [
                     'status' => 'error',
@@ -67,6 +61,29 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     }
 
     /**
+     * Преобразование данных в формате xml в массив
+     * @param Response $response
+     * @return array
+     */
+    public function toArray(Response $response) : array
+    {
+        $isArray = substr_count($response, '<paste>') === 1;
+        if($isArray){
+            $response = "<pastes>{$response}{$response}</pastes>";
+        } else{
+            $response = "<pastes>{$response}</pastes>";
+        }
+        $xmlObject = simplexml_load_string($response);
+        $pastesArray = json_decode(json_encode($xmlObject), true);
+        if ($isArray){
+            array_splice($pastesArray['paste'], 1);
+        }
+        return $pastesArray;
+    }
+
+    /**
+     * Отправка запроса для публикации пасты и получение ответа.
+     * В случае успеха ответ в виде ссылки на пасту. Если нет, вернет тело ошибки.
      * @throws ConnectionException
      */
     public function create(PasteDTO $pasteDTO): array
@@ -98,31 +115,56 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     }
 
     /**
+     * Получение всех public паст пользователей, которые вошли в аккаунт Pastebin.
+     * Если паст не найдено возвращает null.
+     * @return array|null
      * @throws ConnectionException
+     * @param int $paste_private
+     * Если вернуть только public пасты - 0. Если все пасты - 1.
      */
-    public function findAll(): array
+    public function findAll(int $paste_private): ?array
     {
         $pastes = [];
         foreach (User::all() as $user) {
 
-            if($user->api_key != null){
+            if($user->api_key) {
                 $userPaste = $this->getPasteByUser($user->api_key);
-
                 if(!array_key_exists('status',$userPaste)){
-                    $pastes["user.$user->id"] = $userPaste;
+
+                    if($paste_private == 0){
+                        $currentPaste = [];
+                        foreach ($userPaste['paste'] as $paste) {
+                            if($paste['paste_private'] == 0){
+                                $currentPaste[] = $paste;
+                            }
+                        }
+                        $pastes["user.$user->id"]['paste'] = $currentPaste;
+                    }
+                    else {
+                        $pastes["user.$user->id"] = $userPaste;
+                    }
+
+
+
                 }
             }
         }
+        if($pastes == []) return null;
         return $pastes;
     }
 
     /**
+     * Возвращает массив с последними 10 public пастами.
+     * Если паст не найдено возвращает null.
      * @throws ConnectionException
-     * Возвращает массив с последними 10 public пастами
      */
-    public function findLastPastes(): array
+    public function findLastPastes(): ?array
     {
-        $pastes = $this->findAll();
+        $pastes = $this->findAll(0);
+
+        if (!$pastes){
+            return null;
+        }
         $allPastes = [];
         foreach ($pastes as $user) {
             if (isset($user['paste'])) {
@@ -142,6 +184,8 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     }
 
     /**
+     * Удаление пасты через api. Ответ возвращается
+     * в виде массива.
      * @throws ConnectionException
      */
     public function delete(string $user_key, string $paste_key): array
@@ -168,17 +212,24 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     }
 
     /**
-     * @return array
+     * Возвращает список url адресов паст авторизированного пользователя.
+     * Где ключ - это название пасты, а значение - это url адрес пасты.
+     * Если паст не найдено или пользователь не авторизован в Pastebin,
+     * возвращается null.
+     * @return array|null
      * @throws ConnectionException
-     * Возвращает список url адресов паст пользователя
-     * Где ключ - это название пасты, а значение - это url адрес пасты
      */
-    public function getUrlPasteUser(): array
+    public function getUrlPasteUser(): ?array
     {
-        $response = $this->getPasteByUser(Auth::user()->api_key);
+        $user_key = Auth::user()->api_key ?? null;
 
-        if(array_key_exists('error', $response)){
-            return [];
+        if($user_key == null){
+            return null;
+        }
+        $response = $this->getPasteByUser($user_key);
+
+        if(array_key_exists('status', $response)){
+            return null;
         }
         $result = [];
 

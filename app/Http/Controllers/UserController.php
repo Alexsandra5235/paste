@@ -40,7 +40,7 @@ class UserController extends Controller
 
         $response = $this->userService->createUser($user);
 
-        if(empty($response)){
+        if(!$response){
             return redirect()->back()->with('errors','Неверные учетные данные.');
         }
         else {

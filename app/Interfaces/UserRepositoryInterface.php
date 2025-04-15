@@ -6,5 +6,5 @@ use App\DTO\UserDTO;
 
 interface UserRepositoryInterface
 {
-    public function create(UserDTO $user) : string;
+    public function create(UserDTO $user) : ?string;
 }

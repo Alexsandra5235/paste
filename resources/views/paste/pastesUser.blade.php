@@ -2,7 +2,7 @@
     <div class="container">
         <strong class="justify-content-center my-5">Your Pastes</strong>
 
-        @if($response['error'] != '')
+        @if(array_key_exists('error', $response) && $response['error'] != '')
             <div class="card mb-3">
                 <div class="card-header">
                     Уведомление
@@ -15,7 +15,7 @@
             </div>
         @endif
 
-        @if($countUrl != [])
+        @isset($countUrl)
             <div class="card mb-3">
                 <div class="card-header">
                     Уведомление о банах на ваши пасты
@@ -31,10 +31,11 @@
                     </blockquote>
                 </div>
             </div>
-        @endif
+        @endisset
 
 
-        @if(count($response['pastes']) > 0)
+
+        @if(array_key_exists('pastes', $response) && $response['pastes'] != [])
             <div class="list-group">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     @foreach($response['pastes']['paste'] as $paste)

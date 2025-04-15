@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Service\PasteApiService;
-use App\Service\PasteService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 
@@ -18,10 +17,25 @@ class MainController extends Controller
     /**
      * @throws ConnectionException
      */
-    public function dashboard() : object
+    public function dashboard(Request $request) : object
     {
-        $pastes = $this->pasteApiService->findAll();
+        $pastesAll = $this->pasteApiService->findAll(0);
         $listUrl = $this->pasteApiService->getUrlUser();
-        return view('dashboard',['pastes' => $pastes, 'listUrl' => $listUrl]);
+
+        $pastes = [];
+        foreach ($pastesAll as $user) {
+            $pastes = array_merge($pastes, $user['paste']);
+        }
+
+        $perPage = 9;
+        $currentPage = $request->input('page', 1);
+        $totalItems = count($pastes);
+        $totalPages = ceil($totalItems / $perPage);
+
+        $offset = ($currentPage - 1) * $perPage;
+        $currentItems = array_slice($pastes, $offset, $perPage);
+
+        return view('dashboard',['listUrl' => $listUrl, 'currentItems' => $currentItems,
+            'currentPage' => $currentPage, 'totalPages' => $totalPages]);
     }
 }
