@@ -8,6 +8,9 @@ use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ *
+ */
 class ReportRepository implements ReportRepositoryInterface
 {
     /**
@@ -18,6 +21,10 @@ class ReportRepository implements ReportRepositoryInterface
         //
     }
 
+    /**
+     * @param Request $request
+     * @return Report
+     */
     public function create(Request $request): Report
     {
         return Report::query()->create([
@@ -27,6 +34,10 @@ class ReportRepository implements ReportRepositoryInterface
         ]);
     }
 
+    /**
+     * @param string $paste_url
+     * @return void
+     */
     public function deleteByUrl(string $paste_url): void
     {
         Report::query()->where('paste_url', $paste_url)->delete();

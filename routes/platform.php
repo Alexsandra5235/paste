@@ -11,6 +11,8 @@ use App\Orchid\Screens\Examples\ExampleGridScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
+use App\Orchid\Screens\Paste\PasteListScreen;
+use App\Orchid\Screens\Paste\PasteReportListScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Report\ReportScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
@@ -68,8 +70,11 @@ Route::screen('users', UserListScreen::class)
 Route::screen('reports', ReportScreen::class)
     ->name('platform.reports');
 
-Route::screen('pastes',\App\Orchid\Screens\Paste\PasteListScreen::class)
+Route::screen('pastes',PasteListScreen::class)
     ->name('platform.pastes');
+
+Route::screen('paste/{paste_key}/reports', PasteReportListScreen::class)
+    ->name('platform.paste.reports');
 
 // Platform > System > Roles > Role
 Route::screen('roles/{role}/edit', RoleEditScreen::class)

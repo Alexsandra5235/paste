@@ -64,6 +64,9 @@ class PasteListLayout extends Table
                         ->method('remove', [
                             'paste_url' => $paste->paste_url,
                         ]),
+                    Link::make('Посмотреть жалобы')
+                        ->icon('plus')
+                        ->route('platform.paste.reports', basename($paste->paste_url)),
                 ])),
         ];
     }
