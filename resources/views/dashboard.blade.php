@@ -58,9 +58,23 @@
                                                         </p>
                                                         <p class="card-text">Format: {{ $paste['paste_format_long'] }} ({{ $paste['paste_format_short'] }})</p>
                                                         <p class="card-text">Hits: {{ $paste['paste_hits'] }}</p>
-                                                        <div class="input-group" style="width: 100%">
+                                                        <div class="container" style="width: 100%">
                                                             <a href="{{ $paste['paste_url'] }}" class="btn btn-primary">View Paste</a>
-                                                            <a href="{{ route('report.index',['url' => $paste['paste_key']]) }}" class="btn btn-danger">Ban paste</a>
+                                                            @php
+                                                                $userHasPaste = false;
+                                                            @endphp
+
+                                                            @foreach($listUrl as $title => $url)
+                                                                @if($paste['paste_url'] == $url)
+                                                                    @php
+                                                                        $userHasPaste = true;
+                                                                    @endphp
+                                                                    @break
+                                                                @endif
+                                                            @endforeach
+                                                            @if(!$userHasPaste)
+                                                                <a href="{{ route('report.index',['url' => $paste['paste_key']]) }}" class="btn btn-danger">Ban paste</a>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>

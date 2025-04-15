@@ -20,7 +20,7 @@ class MainController extends Controller
     public function dashboard() : object
     {
         $pastes = $this->pasteApiService->findAll();
-//        dd($pastes);
-        return view('dashboard',['pastes' => $pastes]);
+        $listUrl = $this->pasteApiService->getUrlUser();
+        return view('dashboard',['pastes' => $pastes, 'listUrl' => $listUrl]);
     }
 }

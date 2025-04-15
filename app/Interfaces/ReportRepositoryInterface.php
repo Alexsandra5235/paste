@@ -9,5 +9,4 @@ interface ReportRepositoryInterface
 {
     public function create(Request $request) : Report;
     public function deleteByUrl(string $paste_url): void;
-    public function getReportByUser(array $pastes, array $countedUrls): array;
 }

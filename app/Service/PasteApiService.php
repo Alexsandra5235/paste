@@ -101,4 +101,12 @@ class PasteApiService
         return $result;
 
     }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function getUrlUser(): array
+    {
+        return $this->pasteApiRepository->getUrlPasteUser();
+    }
 }

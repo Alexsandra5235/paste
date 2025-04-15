@@ -25,12 +25,4 @@ class ReportService
     {
         $this->reportRepository->deleteByUrl($paste_url);
     }
-    public function overlapUrl()
-    {
-
-    }
-    public function getReportByUser(array $pastes, array $countedUrls): array
-    {
-        return $this->reportRepository->getReportByUser($pastes, $countedUrls);
-    }
 }
