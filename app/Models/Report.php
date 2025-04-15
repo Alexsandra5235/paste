@@ -11,7 +11,13 @@ use Orchid\Attachment\Attachable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
-
+/**
+ * Class Report
+ *
+ * @property int $user_id
+ * @property string $paste_url
+ * @property string $reason
+ */
 class Report extends Model
 {
     use AsSource, Filterable, Attachable;

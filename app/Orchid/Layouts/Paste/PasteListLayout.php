@@ -35,7 +35,7 @@ class PasteListLayout extends Table
     {
         return [
             TD::make('paste_date', 'Дата создания')
-                ->render(fn($paste) => date('d M Y H:i', $paste->paste_date)),
+                ->render(fn($paste) => date('d M Y H:i', $paste['paste_date'])),
             TD::make('paste_title', 'Название'),
             TD::make('paste_size', 'Размер (байты)'),
             TD::make('paste_expire_date', 'Дата истечения')

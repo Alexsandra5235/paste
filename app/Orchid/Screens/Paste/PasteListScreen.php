@@ -5,6 +5,7 @@ namespace App\Orchid\Screens\Paste;
 use App\Orchid\Layouts\Paste\PasteListLayout;
 use App\Service\PasteApiService;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Collection;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
 
@@ -19,14 +20,14 @@ class PasteListScreen extends Screen
     /**
      * Fetch data to be displayed on the screen.
      *
-     * @return array
+     * @return Collection
      * @throws ConnectionException
      */
     public function query(): iterable
     {
         $pastes = $this->pasteApiService->findAllRenderPastes();
         return [
-            'pastes' => $pastes
+            'pastes' => $pastes,
         ];
     }
 

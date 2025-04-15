@@ -8,7 +8,6 @@ use App\Models\Report;
 use App\Models\User;
 use App\Repository\PasteApiRepository;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -98,7 +97,7 @@ class PasteApiService
      * Возвращает все пасты в виде коллекции Paste.
      * Вернет пустую коллекцию, если паст не было найдено.
      * @return Collection
-     *@throws ConnectionException
+     * @throws ConnectionException
      */
     public function findAllRenderPastes(): Collection
     {
@@ -111,6 +110,7 @@ class PasteApiService
                 }
             }
         }
+//        dd(collect($allPastes));
         return Paste::query()->hydrate($allPastes);
     }
 

@@ -11,14 +11,19 @@ use Orchid\Filters\Types\WhereDateStartEnd;
 use Orchid\Platform\Models\User as Authenticatable;
 use Orchid\Screen\AsSource;
 
+/**
+ * Class User
+ *
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string $api_key
+ * @property int $id
+ */
 class User extends Authenticatable
 {
     use AsSource, Filterable, Attachable;
 
-    public function paste() : HasMany
-    {
-        return $this->hasMany(Paste::class);
-    }
     /**
      * The attributes that are mass assignable.
      *
