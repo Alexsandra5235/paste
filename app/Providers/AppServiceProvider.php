@@ -65,12 +65,14 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
             $event->extendSocialite('yandex', \SocialiteProviders\Yandex\Provider::class);
         });
-        View::composer('*', function ($view) {
+
+        View::composer('layouts.paste', function ($view) {
             $pasteService = app(PasteService::class);
             $pasteService->deleteExpired();
-            $latestPastes = app(PasteRepository::class)->findAll();
+            $latestPastes = app(PasteApiRepository::class)->findLastPastes();
             $view->with(['latestPastes' => $latestPastes,'nowDate' => now()]);
         });
+
         View::composer('layouts.myPaste', function ($view) {
             if(Auth::user()->api_key == null){
                 $topPastes = [];

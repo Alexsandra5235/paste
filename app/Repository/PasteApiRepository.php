@@ -113,8 +113,32 @@ class PasteApiRepository implements PasteApiRepositoryInterface
                 }
             }
         }
-//        dd($pastes);
         return $pastes;
+    }
+
+    /**
+     * @throws ConnectionException
+     * Возвращает массив с последними 10 public пастами
+     */
+    public function findLastPastes(): array
+    {
+        $pastes = $this->findAll();
+        $allPastes = [];
+        foreach ($pastes as $user) {
+            if (isset($user['paste'])) {
+                foreach ($user['paste'] as $paste) {
+                    if($paste['paste_private'] == 0){
+                        $allPastes[] = $paste;
+                    }
+                }
+            }
+        }
+
+        usort($allPastes, function($a, $b) {
+            return $b['paste_date'] <=> $a['paste_date'];
+        });
+
+        return array_slice($allPastes, 0, 10);
     }
 
     /**
