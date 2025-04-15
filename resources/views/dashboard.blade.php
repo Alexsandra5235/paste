@@ -51,7 +51,11 @@
                                                         <p class="card-text">Date: {{ date('Y-m-d H:i:s', $paste['paste_date']) }}</p>
                                                         <p class="card-text">Size: {{ $paste['paste_size'] }} bytes</p>
                                                         <p class="card-text">Expiration Date: {{ $paste['paste_expire_date'] == 0 ? 'Never' : date('Y-m-d H:i:s', $paste['paste_expire_date']) }}</p>
-                                                        <p class="card-text">Privacy: @if($paste['paste_private'] == 0) Public @endif {{ $paste['paste_private'] == 2 ? 'Private' : 'Unlisted' }}</p>
+                                                        <p class="card-text">Privacy:
+                                                            @if($paste['paste_private'] == '0') Public @endif
+                                                            @if($paste['paste_private'] == '2') Private @endif
+                                                            @if($paste['paste_private'] == '1') Unlisted @endif
+                                                        </p>
                                                         <p class="card-text">Format: {{ $paste['paste_format_long'] }} ({{ $paste['paste_format_short'] }})</p>
                                                         <p class="card-text">Hits: {{ $paste['paste_hits'] }}</p>
                                                         <div class="input-group" style="width: 100%">

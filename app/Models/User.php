@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Orchid\Attachment\Attachable;
+use Orchid\Filters\Filterable;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
 use Orchid\Filters\Types\WhereDateStartEnd;
@@ -11,7 +13,7 @@ use Orchid\Screen\AsSource;
 
 class User extends Authenticatable
 {
-    use AsSource;
+    use AsSource, Filterable, Attachable;
 
     public function paste() : HasMany
     {

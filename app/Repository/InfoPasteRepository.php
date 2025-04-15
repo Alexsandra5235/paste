@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Interfaces\InfoPasteRepositoryInterface;
 use App\Models\InfoPastes;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class InfoPasteRepository implements InfoPasteRepositoryInterface
@@ -20,7 +21,7 @@ class InfoPasteRepository implements InfoPasteRepositoryInterface
     public function create(string $url): InfoPastes
     {
         return InfoPastes::query()->create([
-            'url' => $url,
+            'paste_url' => $url,
             'user_id' => Auth::id(),
         ]);
     }
@@ -31,4 +32,5 @@ class InfoPasteRepository implements InfoPasteRepositoryInterface
         return User::query()->where('id', $user_id)->firstOrFail()->api_key;
 
     }
+
 }

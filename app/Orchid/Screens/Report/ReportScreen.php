@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Orchid\Screens;
+namespace App\Orchid\Screens\Report;
 
 use App\Models\Report;
-use App\Models\User;
-use App\Repository\PasteApiRepository;
-use App\Repository\ReportRepository;
+use App\Orchid\Layouts\Report\ReportListLayout;
 use App\Service\PasteApiService;
-use App\Service\ReportService;
 use Illuminate\Http\Client\ConnectionException;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
@@ -67,28 +64,7 @@ class ReportScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::table('reports', [
-                TD::make('id', 'ID'),
-                TD::make('paste_url', 'Название')->sort(),
-                TD::make('reason', 'Описание'),
-                TD::make('created_at', 'Создано')->sort(),
-                TD::make('updated_at', 'Обновлено')->sort(),
-                TD::make('complaints_count', 'Количество жалоб на данную пасту')
-                ->render(fn (Report $report) => $report->countReport($report->paste_url)),
-                TD::make('actions', 'Действия')->render(fn (Report $report) => DropDown::make()
-                    ->icon('bs.three-dots-vertical')
-                    ->list([
-                        Link::make(__('Открыть пасту'))
-                            ->href($report->paste_url)
-                            ->target('_blank'),
-                        Button::make(__('Удалить'))
-                            ->icon('bs.trash3')
-                            ->confirm(__('После удаления пасты все её ресурсы и данные будут безвозвратно удалены. '))
-                            ->method('remove', [
-                                'paste_url' => $report->paste_url,
-                            ]),
-                    ]))
-            ]),
+            ReportListLayout::class,
         ];
     }
 

@@ -23,4 +23,5 @@ class InfoPasteService
     {
         return $this->infoPasteRepository->getUserKeyByUrl($url);
     }
+
 }

@@ -31,4 +31,22 @@ class ReportRepository implements ReportRepositoryInterface
     {
         Report::query()->where('paste_url', $paste_url)->delete();
     }
+
+
+    /**
+     * @return array
+     */
+    public function getReportByUser(array $pastes, array $countedUrls): array
+    {
+        $result = [];
+
+        foreach ($pastes['pastes']['paste'] as $paste) {
+            foreach ($countedUrls as $url => $count) {
+                if (str_contains($paste['paste_url'], $url) !== false) {
+                    $result[$paste['paste_title']] = $count;
+                }
+            }
+        }
+        return $result;
+    }
 }

@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Orchid\Attachment\Attachable;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 
 class Report extends Model
 {
-    use AsSource;
+    use AsSource, Filterable, Attachable;
     protected $fillable = [
         'user_id',
         'paste_url',

@@ -8,6 +8,7 @@ use App\Models\Paste;
 use App\Service\InfoPasteService;
 use App\Service\PasteApiService;
 use App\Service\PasteService;
+use App\Service\ReportService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,12 +20,14 @@ class PasteController extends Controller
     protected PasteService $pasteService;
     protected PasteApiService $pasteApiService;
     protected InfoPasteService $infoPasteService;
+    protected ReportService  $reportService;
 
     public function __construct(PasteService $pasteService, PasteApiService $pasteApiService,
-                                InfoPasteService $infoPasteService){
+                                InfoPasteService $infoPasteService, ReportService $reportService){
         $this->pasteService = $pasteService;
         $this->pasteApiService = $pasteApiService;
         $this->infoPasteService = $infoPasteService;
+        $this->reportService = $reportService;
     }
 
     /**
@@ -79,7 +82,9 @@ class PasteController extends Controller
     {
         $response = $this->pasteApiService->getPasteByUser(Auth::user()->api_key);
 
-        return view('paste.pastesUser', ['response' => $response]);
+        $countReport = $this->pasteApiService->countReportUser();
+
+        return view('paste.pastesUser', ['response' => $response, 'countUrl' => $countReport]);
     }
 
     public function test(Request $request) : object

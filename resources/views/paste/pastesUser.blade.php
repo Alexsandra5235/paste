@@ -3,13 +3,31 @@
         <strong class="justify-content-center my-5">Your Pastes</strong>
 
         @if($response['error'] != '')
-            <div class="card mb">
+            <div class="card mb-3">
                 <div class="card-header">
                     Уведомление
                 </div>
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
                         <p>{{ $response['error'] }}</p>
+                    </blockquote>
+                </div>
+            </div>
+        @endif
+
+        @if($countUrl != [])
+            <div class="card mb-3">
+                <div class="card-header">
+                    Уведомление о банах на ваши пасты
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <ul>
+                            @foreach($countUrl as $title => $count)
+                                <li>На пасту с названием {{ $title }} было отправлено кол-во жалоб: {{ $count }}.</li>
+                            @endforeach
+                        </ul>
+                        <small>Пожалуйста примите меры. Баны ваших паст могут привести к их безвозвратному удалению.</small>
                     </blockquote>
                 </div>
             </div>

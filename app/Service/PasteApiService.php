@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\DTO\PasteDTO;
+use App\Models\InfoPastes;
+use App\Models\Report;
 use App\Models\User;
 use App\Repository\PasteApiRepository;
 use Illuminate\Http\Client\ConnectionException;
@@ -77,5 +79,26 @@ class PasteApiService
         $this->reportService->deleteByUrl($paste_url);
 
         return $response;
+    }
+
+    /**
+     * @throws ConnectionException
+     * Возвращает кол-во жалоб на пасты пользователя
+     * Где ключ - это название пасты, а значение это кол-во жалоб на нее
+     */
+    public function countReportUser() : array
+    {
+        $listUrl = $this->pasteApiRepository->getUrlPasteUser();
+
+        $result = [];
+
+        foreach ($listUrl as $title => $url) {
+            $count = Report::query()->where('paste_url', $url)->count();
+            if($count == 0) break;
+            $result[$title] = $count;
+        }
+
+        return $result;
+
     }
 }

@@ -49,6 +49,8 @@ class PasteApiRepository implements PasteApiRepositoryInterface
                 if ($isArray){
                     array_splice($pastesArray['paste'], 1);
                 }
+                $result = [];
+
                 return $pastesArray;
             } else {
                 return [
@@ -140,5 +142,26 @@ class PasteApiRepository implements PasteApiRepositoryInterface
                 'message' => $response->body(),
             ];
         }
+    }
+
+    /**
+     * @return array
+     * @throws ConnectionException
+     * Возвращает список url адресов паст пользователя
+     * Где ключ - это название пасты, а значение - это url адрес пасты
+     */
+    public function getUrlPasteUser(): array
+    {
+        $response = $this->getPasteByUser(Auth::user()->api_key);
+
+        if(array_key_exists('error', $response)){
+            return [];
+        }
+        $result = [];
+
+        foreach ($response['paste'] as $paste) {
+            $result[$paste['paste_title']] = $paste['paste_url'];
+        }
+        return $result;
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('paste_format');
             $table->string('paste_private');
             $table->string('paste_expire_date');
-            $table->string('paste_code');
+            $table->longText('paste_code');
             $table->string('url');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();

@@ -10,4 +10,5 @@ interface PasteApiRepositoryInterface
     public function getPasteByUser(string $user_key) : array;
     public function findAll() : array;
     public function delete(string $user_key, string $paste_key): array;
+    public function getUrlPasteUser(): array;
 }
