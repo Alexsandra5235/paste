@@ -41,9 +41,10 @@ class ReportListLayout extends Table
                 ->icon('bs.three-dots-vertical')
                 ->list([
                     Link::make(__('Открыть пасту'))
+                        ->icon('globe')
                         ->href($report->paste_url)
                         ->target('_blank'),
-                    Button::make(__('Удалить'))
+                    Button::make(__('Удалить пасту'))
                         ->icon('bs.trash3')
                         ->confirm(__('После удаления пасты все её ресурсы и данные будут безвозвратно удалены. '))
                         ->method('remove', [

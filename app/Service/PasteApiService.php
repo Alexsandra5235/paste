@@ -4,11 +4,13 @@ namespace App\Service;
 
 use App\DTO\PasteDTO;
 use App\Models\InfoPastes;
+use App\Models\Paste;
 use App\Models\Report;
 use App\Models\User;
 use App\Repository\PasteApiRepository;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class PasteApiService
@@ -71,6 +73,27 @@ class PasteApiService
 
     /**
      * @throws ConnectionException
+     * Возвращает все пасты в виде "плоского" массива
+     */
+    public function findAllRenderPastes(): Collection
+    {
+        $pastes = $this->findAll();
+        $allPastes = [];
+        foreach ($pastes as $user) {
+            if (isset($user['paste'])) {
+                foreach ($user['paste'] as $paste) {
+                    $allPastes[] = $paste;
+                }
+            }
+        }
+
+
+
+        return Paste::query()->hydrate($allPastes);
+    }
+
+    /**
+     * @throws ConnectionException
      */
     public function delete(string $paste_url): array
     {
@@ -100,6 +123,10 @@ class PasteApiService
 
         return $result;
 
+    }
+    public function getCountReportByUrl(string $url) : int
+    {
+        return Report::query()->where('paste_url', $url)->count();
     }
 
     /**

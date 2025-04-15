@@ -5,9 +5,11 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Orchid\Screen\AsSource;
 
 class Paste extends Model
 {
+    use AsSource;
     protected $fillable = [
         'paste_name',
         'paste_format',
@@ -76,6 +78,10 @@ class Paste extends Model
         }
 
         return implode(' ', $parts);
+
+    }
+    public function getCountReport() : int
+    {
 
     }
 }

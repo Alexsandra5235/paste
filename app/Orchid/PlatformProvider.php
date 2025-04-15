@@ -40,8 +40,12 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route(config('platform.index')),
 
             Menu::make('Жалобы')
-                ->icon('bs.book')
+                ->icon('exclamation')
                 ->route('platform.reports'),
+
+            Menu::make('Пасты')
+                ->icon('bs.card-text')
+                ->route('platform.pastes'),
 
             Menu::make('Sample Screen')
                 ->icon('bs.collection')

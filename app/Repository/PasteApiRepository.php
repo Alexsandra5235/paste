@@ -49,7 +49,6 @@ class PasteApiRepository implements PasteApiRepositoryInterface
                 if ($isArray){
                     array_splice($pastesArray['paste'], 1);
                 }
-                $result = [];
 
                 return $pastesArray;
             } else {

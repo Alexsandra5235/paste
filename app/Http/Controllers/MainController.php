@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Report;
 use App\Service\PasteApiService;
 use App\Service\PasteService;
 use Illuminate\Http\Client\ConnectionException;

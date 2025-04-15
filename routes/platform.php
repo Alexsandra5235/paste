@@ -68,6 +68,9 @@ Route::screen('users', UserListScreen::class)
 Route::screen('reports', ReportScreen::class)
     ->name('platform.reports');
 
+Route::screen('pastes',\App\Orchid\Screens\Paste\PasteListScreen::class)
+    ->name('platform.pastes');
+
 // Platform > System > Roles > Role
 Route::screen('roles/{role}/edit', RoleEditScreen::class)
     ->name('platform.systems.roles.edit')
