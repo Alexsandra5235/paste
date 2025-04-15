@@ -102,6 +102,10 @@ class PasteController extends Controller
 
         return redirect()->back();
     }
+    public function userOrPaste()
+    {
+        $this->pasteApiService->getUserKeyOrPaste();
+    }
 
     /**
      * @throws ConnectionException
