@@ -44,7 +44,6 @@ class PasteListLayout extends Table
                 ->render(fn($paste) => $paste->paste_private == 0 ? 'Public' : ($paste->paste_private == 1 ? 'Unlisted' : 'Private')),
             TD::make('paste_format_long', 'Формат')
                 ->render(fn($paste) => $paste->paste_format_long . "(" . $paste->paste_format_short . ")"),
-            TD::make('paste_format_short', 'Формат короткий'),
             TD::make('paste_url', 'Ссылка на пасту')
                 ->render(fn($paste) => Link::make($paste->paste_url)->href($paste->paste_url)->target('_blank')),
             TD::make('paste_hits', 'Количество просмотров'),
@@ -63,7 +62,7 @@ class PasteListLayout extends Table
                         ->icon('bs.trash3')
                         ->confirm(__('После удаления пасты все её ресурсы и данные будут безвозвратно удалены. '))
                         ->method('remove', [
-                            'paste_key' => $paste->paste_key,
+                            'paste_url' => $paste->paste_url,
                         ]),
                 ])),
         ];

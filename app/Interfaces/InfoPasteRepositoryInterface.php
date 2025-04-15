@@ -10,6 +10,6 @@ use Illuminate\Support\Collection;
 interface InfoPasteRepositoryInterface
 {
     public function create(string $url): InfoPastes;
-    public function getUserKeyByUrl(string $url) : string;
+    public function getUserKeyByUrl(string $url) : string | null;
 
 }

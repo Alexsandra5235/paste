@@ -19,7 +19,7 @@ class InfoPasteService
     {
         return $this->infoPasteRepository->create($url);
     }
-    public function getUserKeyByUrl(string $url) : string
+    public function getUserKeyByUrl(string $url) : string | null
     {
         return $this->infoPasteRepository->getUserKeyByUrl($url);
     }

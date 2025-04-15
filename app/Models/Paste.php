@@ -80,8 +80,4 @@ class Paste extends Model
         return implode(' ', $parts);
 
     }
-    public function getCountReport() : int
-    {
-
-    }
 }

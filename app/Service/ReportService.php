@@ -23,6 +23,10 @@ class ReportService
     }
     public function deleteByUrl(string $paste_url): void
     {
-        $this->reportRepository->deleteByUrl($paste_url);
+        foreach (Report::all() as $report) {
+            if ($report->paste_url == $paste_url) {
+                $this->reportRepository->deleteByUrl($paste_url);
+            }
+        }
     }
 }

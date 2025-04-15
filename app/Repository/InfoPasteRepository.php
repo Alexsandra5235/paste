@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Interfaces\InfoPasteRepositoryInterface;
 use App\Models\InfoPastes;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,10 +27,15 @@ class InfoPasteRepository implements InfoPasteRepositoryInterface
         ]);
     }
 
-    public function getUserKeyByUrl(string $url) : string
+    public function getUserKeyByUrl(string $url) : string | null
     {
-        $user_id = InfoPastes::query()->where('paste_url', $url)->firstOrFail()->user_id;
-        return User::query()->where('id', $user_id)->firstOrFail()->api_key;
+        try {
+            $user_id = InfoPastes::query()->where('paste_url', $url)->firstOrFail()->user_id;
+            return User::query()->where('id', $user_id)->firstOrFail()->api_key;
+        } catch (ModelNotFoundException $e) {
+            return null;
+        }
+
 
     }
 

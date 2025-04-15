@@ -98,6 +98,12 @@ class PasteApiService
     public function delete(string $paste_url): array
     {
         $user_key = $this->infoPasteService->getUserKeyByUrl($paste_url);
+        if ($user_key == null) {
+            return [
+                'status' => 'error',
+                'message' => 'Невозможно получить ключ пользователя для удаления пасты',
+            ];
+        }
         $response = $this->pasteApiRepository->delete($user_key, basename($paste_url));
         $this->reportService->deleteByUrl($paste_url);
 
