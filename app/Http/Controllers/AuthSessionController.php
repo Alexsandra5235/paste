@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Http\Request;
+use Laravel\Socialite\Two\InvalidStateException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class AuthSessionController extends Controller
 {
@@ -20,17 +21,21 @@ class AuthSessionController extends Controller
 
     public function yandexRedirect(): object
     {
-        $user = Socialite::driver('yandex')->user();
+        try {
+            $user = Socialite::driver('yandex')->user();
 
-        $user = User::query()->firstOrCreate([
-            'email' => $user->email
-        ], [
-            'name' => $user->user['display_name'],
-            'password' => Hash::make(Str::random(24)),
-        ]);
+            $user = User::query()->firstOrCreate([
+                'email' => $user->getEmail(),
+            ], [
+                'name' => $user->getName(),
+                'password' => Hash::make(Str::random(24)),
+            ]);
 
-        Auth::login($user);
+            Auth::login($user);
 
-        return redirect()->route('dashboard');
+            return redirect()->route('dashboard');
+        } catch (InvalidStateException $exception){
+            return redirect()->route('dashboard');
+        }
     }
 }

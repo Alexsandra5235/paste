@@ -37,14 +37,14 @@ class PasteController extends Controller
         ]);
 
         $pasteDTO = new PasteDTO(
-            $request->paste_code,
-            $request->paste_name,
-            $request->paste_format,
-            $request->paste_private,
-            $request->expire_date
+            $request->input('paste_code'),
+            $request->input('paste_name'),
+            $request->input('paste_format'),
+            $request->input('paste_private'),
+            $request->input('expire_date')
         );
 
-        if(!$request->check_private){
+        if(!$request->input('check_private')){
             $pasteDTO->userKey = $request->user()->api_key;
         }
 

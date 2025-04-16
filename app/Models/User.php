@@ -19,6 +19,7 @@ use Orchid\Screen\AsSource;
  * @property string $password
  * @property string $api_key
  * @property int $id
+ * @property bool $is_banned
  */
 class User extends Authenticatable
 {

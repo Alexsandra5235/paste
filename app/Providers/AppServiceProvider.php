@@ -57,9 +57,11 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('layouts.myPaste', function ($view) {
             $latestPastes = app(PasteApiService::class)->getPastesByUser(null);
-            $splicePaste = array_splice($latestPastes['pastes']['paste'], 0, 10);
-            $latestPastes['pastes']['paste'] = $splicePaste;
-            $view->with(['latestUserPastes' => $latestPastes['pastes'], 'now' => Carbon::now()]);
+            if(array_key_exists('pastes', $latestPastes) && $latestPastes['pastes'] != []){
+                $splicePaste = array_splice($latestPastes['pastes']['paste'], 0, 10);
+                $latestPastes['pastes']['paste'] = $splicePaste;
+            }
+            $view->with(['latestUserPastes' => $latestPastes, 'now' => Carbon::now()]);
         });
     }
 }

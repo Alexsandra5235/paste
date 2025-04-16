@@ -29,7 +29,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
      * Получение паст пользователя через api.
      * Преобразование xml в массив с данными.
      * @param string $user_key
-     * @return array
+     * @return array<string,mixed>
      *@throws ConnectionException
      */
     public function getPasteByUser(string $user_key): array
@@ -63,7 +63,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     /**
      * Преобразование данных в формате xml в массив
      * @param Response $response
-     * @return array
+     * @return array<string,mixed>
      */
     public function toArray(Response $response) : array
     {
@@ -85,6 +85,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
      * Отправка запроса для публикации пасты и получение ответа.
      * В случае успеха ответ в виде ссылки на пасту. Если нет, вернет тело ошибки.
      * @throws ConnectionException
+     * @return array<string,mixed>
      */
     public function create(PasteDTO $pasteDTO): array
     {
@@ -117,7 +118,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     /**
      * Получение всех public паст пользователей, которые вошли в аккаунт Pastebin.
      * Если паст не найдено возвращает null.
-     * @return array|null
+     * @return array<string,array<string,mixed>>|null
      * @throws ConnectionException
      * @param int $paste_private
      * Если вернуть только public пасты - 0. Если все пасты - 1.
@@ -156,6 +157,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     /**
      * Возвращает массив с последними 10 public пастами.
      * Если паст не найдено возвращает null.
+     * @return list<mixed>|null
      * @throws ConnectionException
      */
     public function findLastPastes(): ?array
@@ -187,6 +189,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
      * Удаление пасты через api. Ответ возвращается
      * в виде массива.
      * @throws ConnectionException
+     * @return array<string,string>
      */
     public function delete(string $user_key, string $paste_key): array
     {
@@ -216,7 +219,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
      * Где ключ - это название пасты, а значение - это url адрес пасты.
      * Если паст не найдено или пользователь не авторизован в Pastebin,
      * возвращается null.
-     * @return array|null
+     * @return array<string,string>|null
      * @throws ConnectionException
      */
     public function getUrlPasteUser(): ?array

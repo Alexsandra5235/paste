@@ -3,7 +3,7 @@
     @if(array_key_exists('error',$latestUserPastes) && $latestUserPastes['error'] != '')
         <p>{{ $latestUserPastes['error'] }}</p>
     @else
-        @foreach($latestUserPastes['paste'] as $paste)
+        @foreach($latestUserPastes['pastes']['paste'] as $paste)
             <a href="{{ $paste['paste_url'] }}">
                 <div class="d-flex text-body-secondary pt-3">
                     <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>

@@ -34,8 +34,8 @@ class UserController extends Controller
         ]);
 
         $user = new UserDTO(
-            $request->user_name,
-            $request->user_password,
+            $request->input('user_name'),
+            $request->input('user_password'),
         );
 
         $response = $this->userService->createUser($user);
@@ -44,7 +44,7 @@ class UserController extends Controller
             return redirect()->back()->with('errors','Неверные учетные данные.');
         }
         else {
-            $user = auth()->user();
+            $user = Auth::user();
             $user->api_key = $response;
             $user->save();
             return redirect()->back()->with('success','Успешный вход в аккаунт Pastebin.');
@@ -56,7 +56,7 @@ class UserController extends Controller
     }
     public function index(): Screen
     {
-        return Screen::query()->create('Users', 'Admin.Users')
+        return Screen::create('Users', 'Admin.Users')
             ->addLayout(UserListLayout::class);
     }
 

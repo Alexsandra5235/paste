@@ -9,7 +9,7 @@ class UserDTO
     /**
      * Create a new class instance.
      */
-    public function __construct($name,$password)
+    public function __construct(string $name,string $password)
     {
         $this->name = $name;
         $this->password = $password;

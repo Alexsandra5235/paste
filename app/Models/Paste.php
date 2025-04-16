@@ -9,5 +9,5 @@ use Orchid\Screen\AsSource;
 
 class Paste extends Model
 {
-    use AsSource,HasFactory;
+    use AsSource;
 }

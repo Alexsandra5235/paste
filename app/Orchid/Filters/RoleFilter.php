@@ -24,7 +24,7 @@ class RoleFilter extends Filter
     /**
      * The array of matched parameters.
      *
-     * @return array
+     * @return array[]
      */
     public function parameters(): array
     {
@@ -34,9 +34,9 @@ class RoleFilter extends Filter
     /**
      * Apply to a given Eloquent query builder.
      *
-     * @param Builder $builder
+     * @param Builder<Role> $builder
      *
-     * @return Builder
+     * @return Builder<Role>
      */
     public function run(Builder $builder): Builder
     {

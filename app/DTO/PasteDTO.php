@@ -13,7 +13,7 @@ class PasteDTO
     /**
      * Create a new class instance.
      */
-    public function __construct($pasteCode, $pasteName, $pasteFormat, $pastePrivate, $expireDate, $userKey = null)
+    public function __construct(string $pasteCode, string $pasteName, string $pasteFormat, int $pastePrivate, string $expireDate, string $userKey = null)
     {
         $this->pasteCode = $pasteCode;
         $this->pasteName = $pasteName;
