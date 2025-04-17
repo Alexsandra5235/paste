@@ -18,8 +18,14 @@ return [
         'client_id' => env('YANDEX_CLIENT_ID') ?: trim(@file_get_contents(env('YANDEX_CLIENT_ID_FILE'))),
         'client_secret' => env('YANDEX_CLIENT_SECRET') ?: trim(@file_get_contents(env('YANDEX_CLIENT_SECRET_FILE'))),
         'redirect' => env('YANDEX_REDIRECT_URI'),
-        'pastebin_api_key' => env('PASTEBIN_API_KEY') ?: trim(@file_get_contents(env('PASTEBIN_API_KEY_FILE'))),
 
+    ],
+
+    'pastebin' => [
+        'pastebin_api_key' => env('PASTEBIN_API_KEY') ?: trim(@file_get_contents(env('PASTEBIN_API_KEY_FILE'))),
+        'pastebin_url' => env('PASTEBIN_URL'),
+        'paste_user_url' => env('PASTEBIN_USER_URL'),
+        'base_url_pastebin' => env('BASE_URL_PASTEBIN'),
     ],
 
     'postmark' => [

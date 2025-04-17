@@ -22,8 +22,8 @@ class UserRepository implements UserRepositoryInterface
      */
     public function create(UserDTO $user) : ?string
     {
-        $response = Http::asForm()->post(env('PASTEBIN_USER_URL'), [
-            'api_dev_key' => env('PASTEBIN_API_KEY'),
+        $response = Http::asForm()->post(config('services.pastebin.paste_user_url'), [
+            'api_dev_key' => config('services.pastebin.pastebin_api_key'),
             'api_user_name' => $user->name,
             'api_user_password' => $user->password,
         ]);
