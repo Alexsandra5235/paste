@@ -11,9 +11,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use SocialiteProviders\Manager\SocialiteWasCalled;
+use SocialiteProviders\Yandex\YandexExtendSocialite;
 
 class AppServiceProvider extends ServiceProvider
 {
+    protected array $listen = [
+        SocialiteWasCalled::class => [
+            YandexExtendSocialite::class.'@handle',
+        ],
+    ];
     /**
      * Register any application services.
      */

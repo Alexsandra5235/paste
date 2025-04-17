@@ -2,6 +2,12 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    @if($errors->has('oauth'))
+        <div class="mt-4 text-sm text-red-600">
+            {{ $errors->first('oauth') }}
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -43,9 +49,9 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
-        @if (Route::has('yandex'))
+        @if (Route::has('login.yandex'))
             <a
-                href="{{ route('yandex') }}"
+                href="{{ route('login.yandex') }}"
                 class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
                 Войти с помощью Yandex
             </a>

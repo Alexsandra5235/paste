@@ -1,6 +1,6 @@
 <div class="my-3 p-3 bg-body rounded-3" style="overflow-y: auto; max-height: 50vh">
     <h6 class="border-bottom pb-2 mb-0"><ya-tr-span data-index="19-0" data-translated="true" data-source-lang="en" data-target-lang="ru" data-value="Recent updates" data-translation="Последние обновления" data-ch="0" data-type="trSpan" style="visibility: inherit !important;">Последние public пасты</ya-tr-span></h6>
-    @if(count($latestPastes) > 0)
+    @isset($latestPastes)
         @foreach($latestPastes as $paste)
             <a href="{{ $paste['paste_url'] }}">
                 <div class="d-flex text-body-secondary pt-3">
@@ -16,7 +16,7 @@
                 </div>
             </a>
         @endforeach
-    @endif
+    @endisset
 
     <small class="d-block text-end mt-3">
         <a href="#"><ya-tr-span data-index="23-0" data-translated="true" data-source-lang="en" data-target-lang="ru" data-value="All updates" data-translation="Все обновления" data-ch="0" data-type="trSpan" style="visibility: inherit !important;">Все обновления</ya-tr-span></a>

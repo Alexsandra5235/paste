@@ -22,6 +22,10 @@ class MainController extends Controller
         $pastesAll = $this->pasteApiService->findAll(0);
         $listUrl = $this->pasteApiService->getUrlUser();
 
+        if (!$pastesAll) {
+            return view('dashboard');
+        }
+
         $pastes = [];
         foreach ($pastesAll as $user) {
             $pastes = array_merge($pastes, $user['paste']);

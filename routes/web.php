@@ -6,6 +6,7 @@ use App\Http\Controllers\PasteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\YandexController;
 use App\Http\Middleware\UnbanUser;
 use App\Orchid\Screens\User\UserEditScreen;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,9 @@ Route::middleware(UnbanUser::class)->group(function () {
 
     Route::get('/dashboard', [MainController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-    Route::get('/login/yandex', [AuthSessionController::class, 'yandex'])->name('yandex');
-    Route::get('/login/yandex/redirect', [AuthSessionController::class, 'yandexRedirect'])->name('yandexRedirect');
+    Route::get('/login/yandex', [YandexController::class, 'redirectToYandex'])->name('login.yandex');
+    Route::get('/login/yandex/redirect', [YandexController::class, 'catchCode'])->name('login.yandex.catch');
+    Route::post('/login/yandex/authorize', [YandexController::class, 'handleCallback'])->name('login.yandex.authorize');
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
