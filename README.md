@@ -52,8 +52,12 @@
 git clone https://github.com/Alexsandra5235/paste.git
 cd paste
 ```
+## 2. Скопируйте .env файл
+```bash
+cp .env.example .env
+```
 
-## 2. 🔐 Настройте Docker Secrets
+## 3. 🔐 Настройте Docker Secrets
 Создай секреты:
 
 ```bash
@@ -62,19 +66,19 @@ echo "your-yandex-client-secret" | docker secret create yandex_client_secret -
 echo "your-pastebin-api-key" | docker secret create pastebin_api_key -
 ```
 
-## 3. Создание overlay-сеть (один раз)
+## 4. Создание overlay-сеть (один раз)
 
 ```bash
 docker network create --driver overlay laravel
 ```
 
-## 4. Соберка образа
+## 5. Сборка образа
 
 ```bash
 docker build -t my-laravel-app -f ./docker/php/Dockerfile .
 ```
 
-## 3. 🚀 Развёртывание проекта в Docker Swarm
+## 6. 🚀 Развёртывание проекта в Docker Swarm
 ```bash
 docker stack deploy -c docker-compose.yml laravel_project
 ```
@@ -97,7 +101,6 @@ docker exec -it $(docker ps -qf "name=laravel_project_app") bash
 ```bash
 composer install
 php artisan migrate
-php artisan db:seed
 ```
 
 Создание администратора Orchid:
