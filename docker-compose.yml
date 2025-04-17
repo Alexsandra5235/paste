@@ -1,9 +1,14 @@
 services:
     app:
-        build:
-            context: .
-            dockerfile: ./docker/php/Dockerfile
-        container_name: laravel_app
+        image: my-laravel-app
+        secrets:
+            - yandex_client_id
+            - yandex_client_secret
+            - pastebin_api_key
+        environment:
+            YANDEX_CLIENT_ID_FILE: /run/secrets/yandex_client_id
+            YANDEX_CLIENT_SECRET_FILE: /run/secrets/yandex_client_secret
+            PASTEBIN_API_KEY_FILE: /run/secrets/pastebin_api_key
         volumes:
             - .:/var/www
         working_dir: /var/www
@@ -14,7 +19,6 @@ services:
 
     webserver:
         image: nginx:latest
-        container_name: laravel_nginx
         ports:
             - "8000:80"
         volumes:
@@ -27,13 +31,9 @@ services:
 
     mysql:
         image: mysql:8.0
-        container_name: laravel_mysql
-        restart: always
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: pastebin_test
-            MYSQL_USER: alexandra
-            MYSQL_PASSWORD: Marvinstruat
         volumes:
             - mysql_data:/var/lib/mysql
         ports:
@@ -43,8 +43,6 @@ services:
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: laravel_phpmyadmin
-        restart: always
         ports:
             - "8081:80"
         environment:
@@ -58,6 +56,14 @@ services:
 volumes:
     mysql_data:
 
+secrets:
+    yandex_client_id:
+        external: true
+    yandex_client_secret:
+        external: true
+    pastebin_api_key:
+        external: true
+
 networks:
     laravel:
-        driver: bridge
+        external: true

@@ -34,7 +34,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
      */
     public function getPasteByUser(string $user_key): array
     {
-        $response = Http::asForm()->post(env('PASTEBIN_USER_PASTE_URL'), [
+        $response = Http::asForm()->post(env('PASTEBIN_URL'), [
             'api_dev_key' => env('PASTEBIN_API_KEY'),
             'api_user_key' => $user_key,
             'api_option' => 'list'
@@ -193,7 +193,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
      */
     public function delete(string $user_key, string $paste_key): array
     {
-        $response = Http::asForm()->post(env('PASTEBIN_USER_PASTE_URL'), [
+        $response = Http::asForm()->post(env('PASTEBIN_URL'), [
             'api_dev_key' => env('PASTEBIN_API_KEY'),
             'api_user_key' => $user_key,
             'api_paste_key' => $paste_key,

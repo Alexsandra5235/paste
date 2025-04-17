@@ -15,9 +15,11 @@ return [
     */
 
     'yandex' => [
-        'client_id' => env('YANDEX_CLIENT_ID'),
-        'client_secret' => env('YANDEX_CLIENT_SECRET'),
-        'redirect' => env('YANDEX_REDIRECT_URI')
+        'client_id' => env('YANDEX_CLIENT_ID') ?: trim(@file_get_contents(env('YANDEX_CLIENT_ID_FILE'))),
+        'client_secret' => env('YANDEX_CLIENT_SECRET') ?: trim(@file_get_contents(env('YANDEX_CLIENT_SECRET_FILE'))),
+        'redirect' => env('YANDEX_REDIRECT_URI'),
+        'pastebin_api_key' => env('PASTEBIN_API_KEY') ?: trim(@file_get_contents(env('PASTEBIN_API_KEY_FILE'))),
+
     ],
 
     'postmark' => [
