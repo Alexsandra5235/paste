@@ -52,7 +52,7 @@
 git clone https://github.com/Alexsandra5235/paste.git
 cd paste
 ```
-## 2. Скопируйте .env файл
+## 2. Создайте .env и копируйте файл
 ```bash
 cp .env.example .env
 ```
@@ -72,22 +72,21 @@ echo "your-pastebin-api-key" | docker secret create pastebin_api_key -
 docker network create --driver overlay laravel
 ```
 
-## 5. Сборка образа
+## 5. Установка пакетного менеджера
+```bash
+npm install
+```
+
+## 6. Сборка образа
 
 ```bash
 docker build -t my-laravel-app -f ./docker/php/Dockerfile .
 ```
 
-## 6. 🚀 Развёртывание проекта в Docker Swarm
+## 7. 🚀 Развёртывание проекта в Docker Swarm
 ```bash
 docker stack deploy -c docker-compose.yml laravel_project
 ```
-
-## 🌐 Доступ к сервисам
-
-- Приложение: [http://localhost:8000](http://localhost:8000)
-- PhpMyAdmin: [http://localhost:8081](http://localhost:8081)
-(логин: root, пароль: root)
 
 ## 🧱 Первоначальная настройка проекта
 В контейнере app выполните следующие действия:
@@ -103,17 +102,22 @@ composer install
 php artisan migrate
 ```
 
+```bash
+php artisan key:generate
+```
+
 Создание администратора Orchid:
 
 ```bash
 php artisan orchid:admin admin admin@admin.com password
 ```
+Данная команда создат пользователя с логином admin@admin.com и паролем password.
 
 Запустите обработчик очереди
+
 ```bash
 php artisan queue:work
 ```
-Данная команда создат пользователя с логином admin@admin.com и паролем password.
 
 ## Полезные команды
 ```bash
@@ -122,7 +126,7 @@ php artisan queue:work
 docker secret ls
 
 # Просмотр всех сервисов
-docker service ls  
+docker service ls 
 
 # Остановка проекта:
 docker stack rm laravel_project
@@ -132,13 +136,18 @@ php artisan config:clear
 php artisan config:cache
 ```
 
-Сервисы должны выглядеть следующим образом:
-
+## Сервисы должны выглядеть следующим образом:
 ```bash
 NAME                         MODE         REPLICAS   IMAGE                          
 laravel_project_app          replicated   1/1        my-laravel-app:latest
 laravel_project_mysql        replicated   1/1        mysql:8.0                      
 laravel_project_phpmyadmin   replicated   1/1        phpmyadmin/phpmyadmin:latest 
-laravel_project_webserver    replicated   1/1        nginx:latest                   
-
+laravel_project_webserver    replicated   1/1        nginx:latest                  
 ```
+
+
+## 🌐 Доступ к сервисам
+
+- Приложение: [http://localhost:8000](http://localhost:8000)
+- PhpMyAdmin: [http://localhost:8081](http://localhost:8081)
+(логин: root, пароль: root)
