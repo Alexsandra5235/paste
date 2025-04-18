@@ -57,7 +57,7 @@ cd paste
 cp .env.example .env
 ```
 
-## 3. 🔐 Настройте Docker Secrets
+## 3. 🔐 Настройте Docker Secrets (один раз)
 Создай секреты:
 
 ```bash
