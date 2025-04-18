@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\FetchPastebinPastes;
 use App\Models\Report;
 use App\Service\PasteApiService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class MainController extends Controller
 {
     protected PasteApiService $pasteApiService;
-    public function __construct(PasteApiService $pasteApiService){
+    protected FetchPastebinPastes $fetchPastebinPastes;
+    public function __construct(PasteApiService $pasteApiService, FetchPastebinPastes $fetchPastebinPastes){
         $this->pasteApiService = $pasteApiService;
+        $this->fetchPastebinPastes = $fetchPastebinPastes;
     }
 
     /**
@@ -19,7 +23,12 @@ class MainController extends Controller
      */
     public function dashboard(Request $request) : object
     {
-        $pastesAll = $this->pasteApiService->findAll(0);
+
+        $cacheKey = 'pastes';
+        $pastesAll = Cache::get($cacheKey);
+
+        FetchPastebinPastes::dispatch($cacheKey);
+
         $listUrl = $this->pasteApiService->getUrlUser();
 
         if (!$pastesAll) {

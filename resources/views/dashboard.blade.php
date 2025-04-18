@@ -36,51 +36,54 @@
                             </div>
                         @endif
                         <div class="list-group">
-                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                            <div id="pastes-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
                                 @isset($currentItems)
                                     @if(!empty($currentItems) && count($currentItems) > 0)
-                                        @foreach($currentItems as $paste)
-                                            <div class="col">
-                                                <div class="card shadow-sm" style="height: 100%">
-                                                    <div class="card-header">
-                                                        Title: {{ $paste['paste_title'] }}
-                                                    </div>
-                                                    <div class="card-body" style="width: 100%">
-                                                        <p class="card-text">Key: {{ $paste['paste_key'] }}</p>
-                                                        <p class="card-text">Date: {{ date('Y-m-d H:i:s', $paste['paste_date']) }}</p>
-                                                        <p class="card-text">Size: {{ $paste['paste_size'] }} bytes</p>
-                                                        <p class="card-text">Expiration Date: {{ $paste['paste_expire_date'] == 0 ? 'Never' : date('Y-m-d H:i:s', $paste['paste_expire_date']) }}</p>
-                                                        <p class="card-text">Privacy:
-                                                            @if($paste['paste_private'] == '0') Public @endif
-                                                            @if($paste['paste_private'] == '2') Private @endif
-                                                            @if($paste['paste_private'] == '1') Unlisted @endif
-                                                        </p>
-                                                        <p class="card-text">Format: {{ $paste['paste_format_long'] }} ({{ $paste['paste_format_short'] }})</p>
-                                                        <p class="card-text">Hits: {{ $paste['paste_hits'] }}</p>
-                                                        <div class="container" style="width: 100%">
-                                                            <a href="{{ $paste['paste_url'] }}" class="btn btn-primary">View Paste</a>
-                                                            @php
-                                                                $userHasPaste = false;
-                                                            @endphp
-                                                            @isset($listUrl)
-                                                                @foreach($listUrl as $title => $url)
-                                                                    @if($paste['paste_url'] == $url)
-                                                                        @php
-                                                                            $userHasPaste = true;
-                                                                        @endphp
-                                                                        @break
+                                            @foreach($currentItems as $paste)
+                                                <div class="col">
+                                                    <div class="card shadow-sm" style="height: 100%">
+                                                        <div class="paste" id="paste-{{ $paste['paste_key'] }}">
+                                                            <div class="card-header">
+                                                                Title: {{ $paste['paste_title'] }}
+                                                            </div>
+                                                            <div class="card-body" style="width: 100%">
+                                                                <p class="card-text">Key: {{ $paste['paste_key'] }}</p>
+                                                                <p class="card-text">Date: {{ date('Y-m-d H:i:s', $paste['paste_date']) }}</p>
+                                                                <p class="card-text">Size: {{ $paste['paste_size'] }} bytes</p>
+                                                                <p class="card-text">Expiration Date: {{ $paste['paste_expire_date'] == 0 ? 'Never' : date('Y-m-d H:i:s', $paste['paste_expire_date']) }}</p>
+                                                                <p class="card-text">Privacy:
+                                                                    @if($paste['paste_private'] == '0') Public @endif
+                                                                    @if($paste['paste_private'] == '2') Private @endif
+                                                                    @if($paste['paste_private'] == '1') Unlisted @endif
+                                                                </p>
+                                                                <p class="card-text">Format: {{ $paste['paste_format_long'] }} ({{ $paste['paste_format_short'] }})</p>
+                                                                <p class="card-text">Hits: {{ $paste['paste_hits'] }}</p>
+                                                                <div class="container" style="width: 100%">
+                                                                    <a href="{{ $paste['paste_url'] }}" class="btn btn-primary">View Paste</a>
+                                                                    @php
+                                                                        $userHasPaste = false;
+                                                                    @endphp
+                                                                    @isset($listUrl)
+                                                                        @foreach($listUrl as $title => $url)
+                                                                            @if($paste['paste_url'] == $url)
+                                                                                @php
+                                                                                    $userHasPaste = true;
+                                                                                @endphp
+                                                                                @break
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endisset
+                                                                    @if(!$userHasPaste)
+                                                                        <a href="{{ route('report.index',['url' => $paste['paste_key']]) }}" class="btn btn-danger">Ban paste</a>
                                                                     @endif
-                                                                @endforeach
-                                                            @endisset
-                                                            @if(!$userHasPaste)
-                                                                <a href="{{ route('report.index',['url' => $paste['paste_key']]) }}" class="btn btn-danger">Ban paste</a>
-                                                            @endif
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        </div>
                                     @endif
                                 @endisset
                             </div>

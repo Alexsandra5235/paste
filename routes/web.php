@@ -18,6 +18,7 @@ Route::middleware(UnbanUser::class)->group(function () {
     });
 
     Route::get('/dashboard', [MainController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/api/pastes', [PasteController::class, 'apiPastes'])->name('api.pastes');
 
     Route::get('/login/yandex', [YandexController::class, 'redirectToYandex'])->name('login.yandex');
     Route::get('/login/yandex/redirect', [YandexController::class, 'catchCode'])->name('login.yandex.catch');

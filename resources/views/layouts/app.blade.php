@@ -34,4 +34,69 @@
             </div>
         </div>
     </body>
+
+    <script>
+        function getPrivacyLabel(value) {
+            if (value === '0') return 'Public';
+            if (value === '1') return 'Unlisted';
+            if (value === '2') return 'Private';
+            return 'Unknown';
+        }
+
+        function formatTimestamp(timestamp) {
+            if (!timestamp || timestamp == 0) return 'Never';
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleString();
+        }
+
+        function renderPastes(pastes, listUrl = {}) {
+            const container = document.getElementById('pastes-container');
+            container.innerHTML = '';
+
+            pastes.forEach(paste => {
+                const col = document.createElement('div');
+                col.className = 'col';
+
+                const isUserPaste = Object.values(listUrl).includes(paste.paste_url);
+
+                col.innerHTML = `
+                    <div class="card shadow-sm" style="height: 100%">
+                        <div class="paste" id="paste-${paste.id}">
+                            <div class="card-header">
+                                Title: ${paste['paste_title']}
+                            </div>
+                            <div class="card-body" style="width: 100%">
+                                <p class="card-text">Key: ${paste.paste_key}</p>
+                                <p class="card-text">Date: ${formatTimestamp(paste.paste_date)}</p>
+                                <p class="card-text">Size: ${paste.paste_size} bytes</p>
+                                <p class="card-text">Expiration Date: ${formatTimestamp(paste.paste_expire_date)}</p>
+                                <p class="card-text">Privacy: ${getPrivacyLabel(paste.paste_private)}</p>
+                                <p class="card-text">Format: ${paste.paste_format_long} (${paste.paste_format_short})</p>
+                                <p class="card-text">Hits: ${paste.paste_hits}</p>
+                                <div class="container" style="width: 100%">
+                                    <a href="${paste.paste_url}" class="btn btn-primary">View Paste</a>
+                                    ${!isUserPaste ? `<a href="/report?url=${paste.paste_key}" class="btn btn-danger">Ban paste</a>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+        }
+
+        async function fetchPastes() {
+            try {
+                const res = await fetch('/api/pastes');
+                const pastes = await res.json();
+                const listUrl = @json($listUrl ?? []);
+                renderPastes(pastes, listUrl);
+            } catch (err) {
+                console.error('Ошибка загрузки паст:', err);
+            }
+        }
+
+        setInterval(fetchPastes, 5000);
+
+    </script>
 </html>

@@ -11,6 +11,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use function Pest\Laravel\withMiddleware;
 
 class PasteController extends Controller
@@ -81,6 +82,11 @@ class PasteController extends Controller
     public function delete(string $paste_url): void
     {
         $this->pasteApiService->delete($paste_url);
+    }
+
+    public function apiPastes(): JsonResponse
+    {
+        return Cache::get('pastes');
     }
 
 }
