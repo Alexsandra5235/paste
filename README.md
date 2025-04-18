@@ -108,6 +108,11 @@ php artisan migrate
 ```bash
 php artisan orchid:admin admin admin@admin.com password
 ```
+
+Запустите обработчик очереди
+```bash
+php artisan queue:work
+```
 Данная команда создат пользователя с логином admin@admin.com и паролем password.
 
 ## Полезные команды
