@@ -18,31 +18,13 @@ use Illuminate\Support\Facades\Cache;
 class PasteApiService
 {
     /**
-     * @var PasteApiRepository
-     */
-    protected PasteApiRepository $pasteApiRepository;
-    /**
-     * @var ReportService
-     */
-    protected ReportService $reportService;
-
-    /**
-     * Create a new class instance.
-     */
-    public function __construct(PasteApiRepository $pasteApiRepository, ReportService $reportService)
-    {
-        $this->pasteApiRepository = $pasteApiRepository;
-        $this->reportService = $reportService;
-    }
-
-    /**
      * Публикация пасты через api. В ответ приходит массив
      * с ошибкой запроса или успехом, результат находится в поле "status".
      * @throws ConnectionException
      */
     public function createPaste(PasteDTO $pasteDTO): array
     {
-        return $this->pasteApiRepository->create($pasteDTO);
+        return app(PasteApiRepository::class)->create($pasteDTO);
     }
 
     /**
@@ -66,7 +48,7 @@ class PasteApiService
             ];
         }
 
-        $response = $this->pasteApiRepository->getPasteByUser($key);
+        $response = app(PasteApiRepository::class)->getPasteByUser($key);
 
         if (isset($response['status']) && $response['status'] === 'error') {
             return [
@@ -91,7 +73,32 @@ class PasteApiService
      */
     public function findAll(int $paste_private) : ?array
     {
-        return $this->pasteApiRepository->findAll($paste_private);
+        return app(PasteApiRepository::class)->findAll($paste_private);
+    }
+
+    /**
+     * Получение кэшированных данных паст.
+     * @return array|null
+     * Возвращает отсортированные по дате создания
+     * (от меньшей к большей) пасты. Если пасты не найдены в кэше,
+     * возвращает null.
+     *
+     */
+    public function getCachePaste(): ?array
+    {
+        $latestPastes = Cache::get('pastes');
+        $pastes = [];
+        if($latestPastes) {
+            foreach ($latestPastes as $user) {
+                $pastes = array_merge($pastes, $user['paste']);
+            }
+        } else {
+            return null;
+        }
+        usort($pastes, function($a, $b) {
+            return $b['paste_date'] <=> $a['paste_date'];
+        });
+        return $pastes;
     }
 
     /**
@@ -111,7 +118,6 @@ class PasteApiService
                 }
             }
         }
-//        dd(collect($allPastes));
         return Paste::query()->hydrate($allPastes);
     }
 
@@ -132,8 +138,8 @@ class PasteApiService
                 'message' => 'Невозможно получить ключ пользователя для удаления пасты',
             ];
         }
-        $response = $this->pasteApiRepository->delete($user_key, basename($paste_url));
-        $this->reportService->deleteByUrl($paste_url);
+        $response = app(PasteApiRepository::class)->delete($user_key, basename($paste_url));
+        app(ReportService::class)->deleteByUrl($paste_url);
 
         return $response;
     }
@@ -148,14 +154,14 @@ class PasteApiService
      */
     public function countReportUser() : ?array
     {
-        $listUrl = $this->pasteApiRepository->getUrlPasteUser();
+        $listUrl = app(PasteApiRepository::class)->getUrlPasteUser();
         if(!$listUrl) return null;
 
         $result = [];
 
         foreach ($listUrl as $title => $url) {
             $count = Report::query()->where('paste_url', $url)->count();
-            if($count == 0) break;
+            if($count == 0) continue;
             $result[$title] = $count;
         }
         if($result == []) return null;
@@ -181,7 +187,7 @@ class PasteApiService
      */
     public function getUrlUser(): ?array
     {
-        $listUrl = $this->pasteApiRepository->getUrlPasteUser();
+        $listUrl = app(PasteApiRepository::class)->getUrlPasteUser();
         if(!$listUrl) return null;
         return $listUrl;
     }
@@ -199,7 +205,7 @@ class PasteApiService
         foreach (User::all() as $user) {
             $user_key = $user->api_key ?? null;
             if ($user_key) {
-                $pastes = $this->pasteApiRepository->getPasteByUser($user_key);
+                $pastes = app(PasteApiRepository::class)->getPasteByUser($user_key);
                 $result[$user_key] = $pastes;
             }
         }

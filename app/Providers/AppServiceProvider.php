@@ -2,12 +2,17 @@
 
 namespace App\Providers;
 
+use App\Jobs\FetchPastebinPastes;
+use App\Models\Paste;
 use App\Repository\PasteApiRepository;
 use App\Repository\ReportRepository;
+use App\Repository\UserRepository;
 use App\Service\PasteApiService;
 use App\Service\ReportService;
+use App\Service\UserService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -34,17 +39,24 @@ class AppServiceProvider extends ServiceProvider
             return new ReportRepository();
         });
 
+        $this->app->singleton(UserRepository::class, function ($app) {
+            return new UserRepository();
+        });
+
         $this->app->singleton(ReportService::class, function ($app) {
             return new ReportService(
                 $app->make(ReportRepository::class),
             );
         });
 
-        $this->app->singleton(PasteApiService::class, function ($app) {
-            return new PasteApiService(
-                $app->make(PasteApiRepository::class),
-                $app->make(ReportService::class),
+        $this->app->singleton(UserService::class, function ($app) {
+            return new UserService(
+                $app->make(UserRepository::class),
             );
+        });
+
+        $this->app->singleton(PasteApiService::class, function ($app) {
+            return new PasteApiService();
         });
     }
 
@@ -58,8 +70,12 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('layouts.paste', function ($view) {
-            $latestPastes = app(PasteApiRepository::class)->findLastPastes();
-            $view->with(['latestPastes' => $latestPastes,'now' => Carbon::now()]);
+            $latestPastes = app(PasteApiService::class)->getCachePaste();
+            $pastes = [];
+            if ($latestPastes) {
+                $pastes = array_slice($latestPastes, 0, 10);
+            }
+            $view->with(['latestPastes' => $pastes,'now' => Carbon::now()]);
         });
 
         View::composer('layouts.myPaste', function ($view) {

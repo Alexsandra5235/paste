@@ -49,8 +49,12 @@
             return date.toLocaleString();
         }
 
-        function renderPastes(pastes, listUrl = {}) {
+        function renderPastes(pastes, listUrl) {
             const container = document.getElementById('pastes-container');
+            if (!container) {
+                console.warn('Контейнер для паст не найден. Возможно, вы не на главной странице.');
+                return;
+            }
             container.innerHTML = '';
 
             pastes.forEach(paste => {
@@ -75,7 +79,7 @@
                                 <p class="card-text">Hits: ${paste.paste_hits}</p>
                                 <div class="container" style="width: 100%">
                                     <a href="${paste.paste_url}" class="btn btn-primary">View Paste</a>
-                                    ${!isUserPaste ? `<a href="/report?url=${paste.paste_key}" class="btn btn-danger">Ban paste</a>` : ''}
+                                    ${!isUserPaste ? `<a href="/report/store/${paste.paste_key}" class="btn btn-danger">Ban paste</a>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -88,9 +92,22 @@
         async function fetchPastes() {
             try {
                 const res = await fetch('/api/pastes');
-                const pastes = await res.json();
-                const listUrl = @json($listUrl ?? []);
-                renderPastes(pastes, listUrl);
+                const result = await res.json();
+                let listUrl = await fetch('/url/user')
+                const listUrlResult = await listUrl.json();
+
+                if (!listUrlResult.success) {
+                    listUrl = []
+                }
+
+                if (result.success) {
+                    const pastes = result.data;
+                    console.log('Полученные пасты:', pastes);
+
+                    renderPastes(pastes, listUrlResult.data);
+                } else {
+                    console.error('Ошибка при загрузке паст:', result.message);
+                }
             } catch (err) {
                 console.error('Ошибка загрузки паст:', err);
             }

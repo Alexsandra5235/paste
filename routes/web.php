@@ -8,17 +8,20 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\YandexController;
 use App\Http\Middleware\UnbanUser;
+use App\Jobs\FetchPastebinPastes;
 use App\Orchid\Screens\User\UserEditScreen;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(UnbanUser::class)->group(function () {
     Route::get('/', function () {
+        FetchPastebinPastes::dispatch('pastes');
         return view('welcome');
     });
 
     Route::get('/dashboard', [MainController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/api/pastes', [PasteController::class, 'apiPastes'])->name('api.pastes');
+    Route::get('/url/user', [PasteController::class, 'getUrlUser'])->name('url.user');
 
     Route::get('/login/yandex', [YandexController::class, 'redirectToYandex'])->name('login.yandex');
     Route::get('/login/yandex/redirect', [YandexController::class, 'catchCode'])->name('login.yandex.catch');

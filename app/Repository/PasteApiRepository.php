@@ -155,37 +155,6 @@ class PasteApiRepository implements PasteApiRepositoryInterface
     }
 
     /**
-     * Возвращает массив с последними 10 public пастами.
-     * Если паст не найдено возвращает null.
-     * @return list<mixed>|null
-     * @throws ConnectionException
-     */
-    public function findLastPastes(): ?array
-    {
-        $pastes = $this->findAll(0);
-
-        if (!$pastes){
-            return null;
-        }
-        $allPastes = [];
-        foreach ($pastes as $user) {
-            if (isset($user['paste'])) {
-                foreach ($user['paste'] as $paste) {
-                    if($paste['paste_private'] == 0){
-                        $allPastes[] = $paste;
-                    }
-                }
-            }
-        }
-
-        usort($allPastes, function($a, $b) {
-            return $b['paste_date'] <=> $a['paste_date'];
-        });
-
-        return array_slice($allPastes, 0, 10);
-    }
-
-    /**
      * Удаление пасты через api. Ответ возвращается
      * в виде массива.
      * @throws ConnectionException

@@ -39,8 +39,4 @@ interface PasteApiRepositoryInterface
      */
     public function getUrlPasteUser(): ?array;
 
-    /**
-     * @return mixed
-     */
-    public function findLastPastes();
 }
