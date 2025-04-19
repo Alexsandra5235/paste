@@ -11,6 +11,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 /**
  *
@@ -42,6 +43,7 @@ class PasteApiService
         } else if (Auth::user()->api_key) {
             $key = Auth::user()->api_key;
         } else {
+            Log::info('PasteApiService: Попытка получения паст: пользователь не авторизирован в pastebin.');
             return [
                 'pastes' => [],
                 'error' => 'Ваш аккаунт не авторизирован в системе Pastebin.'
@@ -51,6 +53,7 @@ class PasteApiService
         $response = app(PasteApiRepository::class)->getPasteByUser($key);
 
         if (isset($response['status']) && $response['status'] === 'error') {
+            Log::error('PasteApiService: Ошибка запроса получения паст ' . $response['error']);
             return [
                 'pastes' => [],
                 'error' => $response['message']
@@ -133,6 +136,7 @@ class PasteApiService
     {
         $user_key = $this->getUserKeyByUrl($paste_url);
         if (!$user_key) {
+            Log::error('PasteApiService: Ошибка удаления пасты: пользователь не был найден');
             return [
                 'status' => 'error',
                 'message' => 'Невозможно получить ключ пользователя для удаления пасты',

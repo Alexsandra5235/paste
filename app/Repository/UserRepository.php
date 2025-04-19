@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -31,6 +32,7 @@ class UserRepository implements UserRepositoryInterface
         if ($response->successful()) {
             return $response->body();
         } else {
+            Log::error('UserRepository: Ошибка создания пользователя ' . $response->body());
             return null;
         }
     }

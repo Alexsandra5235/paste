@@ -9,6 +9,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use function Pest\Laravel\delete;
 
 /**
@@ -52,6 +53,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
                 ];
             }
         } else {
+            Log::error('PasteApiRepository: ошибка получения паст ' . $response->body());
             return [
                 'status' => 'error',
                 'message' => 'Unable to fetch pastes. Please try again later.',
@@ -101,6 +103,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
         ]);
 
         if (str_contains($response->body(), 'Bad API request')) {
+            Log::error('PasteApiRepository: ошибка создания пасты: ' . $response->body());
             return [
                 'status' => 'error',
                 'message' => 'Bad API request. Please try again later.',
@@ -170,6 +173,7 @@ class PasteApiRepository implements PasteApiRepositoryInterface
         ]);
 
         if (str_contains($response->body(), 'Bad API request')) {
+            Log::error('PasteApiRepository: ошибка удаления пасты: ' . $response->body());
             return [
                 'status' => 'error',
                 'message' => 'Bad API request. Please try again later.',
