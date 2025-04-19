@@ -36,84 +36,34 @@
     </body>
 
     <script>
-        function getPrivacyLabel(value) {
-            if (value === '0') return 'Public';
-            if (value === '1') return 'Unlisted';
-            if (value === '2') return 'Private';
-            return 'Unknown';
-        }
-
-        function formatTimestamp(timestamp) {
-            if (!timestamp || timestamp == 0) return 'Never';
-            const date = new Date(timestamp * 1000);
-            return date.toLocaleString();
-        }
-
-        function renderPastes(pastes, listUrl) {
-            const container = document.getElementById('pastes-container');
-            if (!container) {
-                console.warn('Контейнер для паст не найден. Возможно, вы не на главной странице.');
-                return;
-            }
-            container.innerHTML = '';
-
-            pastes.forEach(paste => {
-                const col = document.createElement('div');
-                col.className = 'col';
-
-                const isUserPaste = Object.values(listUrl).includes(paste.paste_url);
-
-                col.innerHTML = `
-                    <div class="card shadow-sm" style="height: 100%">
-                        <div class="paste" id="paste-${paste.id}">
-                            <div class="card-header">
-                                Title: ${paste['paste_title']}
-                            </div>
-                            <div class="card-body" style="width: 100%">
-                                <p class="card-text">Key: ${paste.paste_key}</p>
-                                <p class="card-text">Date: ${formatTimestamp(paste.paste_date)}</p>
-                                <p class="card-text">Size: ${paste.paste_size} bytes</p>
-                                <p class="card-text">Expiration Date: ${formatTimestamp(paste.paste_expire_date)}</p>
-                                <p class="card-text">Privacy: ${getPrivacyLabel(paste.paste_private)}</p>
-                                <p class="card-text">Format: ${paste.paste_format_long} (${paste.paste_format_short})</p>
-                                <p class="card-text">Hits: ${paste.paste_hits}</p>
-                                <div class="container" style="width: 100%">
-                                    <a href="${paste.paste_url}" class="btn btn-primary">View Paste</a>
-                                    ${!isUserPaste ? `<a href="/report/store/${paste.paste_key}" class="btn btn-danger">Ban paste</a>` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(col);
-            });
-        }
-
-        async function fetchPastes() {
-            try {
-                const res = await fetch('/api/pastes');
-                const result = await res.json();
-                let listUrl = await fetch('/url/user')
-                const listUrlResult = await listUrl.json();
-
-                if (!listUrlResult.success) {
-                    listUrl = []
+        function updatePastesPeriodically() {
+            fetch('{{ route('dashboard') }}', {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
+            })
+                .then(res => res.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
 
-                if (result.success) {
-                    const pastes = result.data;
-                    console.log('Полученные пасты:', pastes);
+                    const newPastes = doc.querySelector('#pastes-container');
+                    const newPagination = doc.querySelector('#pagination');
 
-                    renderPastes(pastes, listUrlResult.data);
-                } else {
-                    console.error('Ошибка при загрузке паст:', result.message);
-                }
-            } catch (err) {
-                console.error('Ошибка загрузки паст:', err);
-            }
+                    document.querySelector('#pastes-container').innerHTML = newPastes.innerHTML;
+                    document.querySelector('#pagination').innerHTML = newPagination.innerHTML;
+                })
+                .catch(err => {
+                    console.error('Ошибка при получении паст:', err);
+                });
         }
 
-        setInterval(fetchPastes, 5000);
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.location.pathname === '/dashboard') {
+                updatePastesPeriodically();
 
+                setInterval(updatePastesPeriodically, 10000);
+            }
+        });
     </script>
 </html>

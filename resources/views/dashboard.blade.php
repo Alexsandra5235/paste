@@ -35,9 +35,8 @@
                                 <p>{{ session('success') }}</p>
                             </div>
                         @endif
-                        <div class="list-group">
-                            <div id="pastes-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-
+                        <div class="list-group" id="pastes-container">
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                                 @isset($currentItems)
                                     @if(!empty($currentItems) && count($currentItems) > 0)
                                             @foreach($currentItems as $paste)
@@ -92,7 +91,7 @@
                             @isset($currentPage, $totalPages)
                                 @if($totalPages > 1)
                                     <nav aria-label="Page navigation example" class="mt-3">
-                                        <ul class="pagination justify-content-center">
+                                        <ul class="pagination justify-content-center" id="pagination">
                                             @if($currentPage > 1)
                                                 <li class="page-item">
                                                     <a class="page-link" href="?page={{ $currentPage - 1 }}">Назад</a>

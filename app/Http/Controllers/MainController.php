@@ -25,27 +25,18 @@ class MainController extends Controller
      */
     public function dashboard(Request $request) : View
     {
-
-        $cacheKey = 'pastes';
         $pastesAll = app(PasteApiService::class)->getCachePaste();
-
-        FetchPastebinPastes::dispatch($cacheKey);
-
         $listUrl = app(PasteApiService::class)->getUrlUser();
 
-        if (!$pastesAll) {
-            return view('dashboard');
-        }
+        FetchPastebinPastes::dispatch('pastes');
 
         $perPage = 9;
         $currentPage = $request->input('page', 1);
         $totalItems = count($pastesAll);
         $totalPages = ceil($totalItems / $perPage);
-
         $offset = ($currentPage - 1) * $perPage;
         $currentItems = array_slice($pastesAll, $offset, $perPage);
 
-        return view('dashboard',['listUrl' => $listUrl, 'currentItems' => $currentItems,
-            'currentPage' => $currentPage, 'totalPages' => $totalPages]);
+        return view('dashboard', compact('currentItems', 'listUrl', 'currentPage', 'totalPages'));
     }
 }
