@@ -60,6 +60,8 @@ cp .env.example .env
 ## 3. 🔐 Настройте Docker Secrets (один раз)
 Создай секреты:
 
+Client Id и Client Secret [Yandex](https://oauth.yandex.ru/client/new/id)
+
 ```bash
 echo "your-yandex-client-id" | docker secret create yandex_client_id -
 echo "your-yandex-client-secret" | docker secret create yandex_client_secret -
@@ -75,6 +77,7 @@ docker network create --driver overlay laravel
 ## 5. Установка пакетного менеджера
 ```bash
 npm install
+npm run build
 ```
 
 ## 6. Сборка образа
@@ -151,3 +154,5 @@ laravel_project_webserver    replicated   1/1        nginx:latest
 - Приложение: [http://localhost:8000](http://localhost:8000)
 - PhpMyAdmin: [http://localhost:8081](http://localhost:8081)
 (логин: root, пароль: root)
+- Админка: [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+
